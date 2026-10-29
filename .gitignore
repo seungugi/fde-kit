@@ -1,0 +1,13 @@
+__pycache__/
+*.py[cod]
+.test-tmp/
+.venv/
+.env
+.env.*
+*.log
+fde-practice*/
+my-project*/
+_local/
+**/fde-notes/
+**/.agents/
+.DS_Store

@@ -1,2 +1,116 @@
-# fde-kit
-User-led FDE practice kit: clarify problems, map actual rubrics to evidence, verify work, and preserve context with Codex.
+# FDE Kit v0.2
+
+문제 정의 → 해결 방향 → 작업 분해·위임 → 검증 → 맥락 복구 → 설명·인수인계.
+
+사용자가 방향을 정하고, 에이전트는 문제 정의의 빈틈·실제 채점 기준·다음 행동을 짚어주는 로컬 작업 키트입니다. 구현을 요청하면 그 범위의 작업과 검증을 마칩니다. 스킬 하나가 필요한 단계의 지침만 읽고, 작은 명령 도구가 작업 상태와 검증 근거를 기록합니다. 기록 도구는 Python 3.10 이상이면 추가 패키지 없이 실행되며, 대화에는 환경에서 제공하는 Codex와 인증이 필요합니다.
+
+## 대회 당일 시작하기
+
+외부 저장소 사용이 허용된 환경에서, **실제 과제 폴더를 현재 위치로 둔 채** 실행하세요. 아래 명령은 Linux/Bash용입니다.
+
+```bash
+git clone https://github.com/seungugi/fde-kit.git "$HOME/fde-kit"
+python3 "$HOME/fde-kit/fde.py" init . --profile competition
+python3 "$HOME/fde-kit/fde.py" launch .
+```
+
+clone은 처음 한 번만 합니다. 키트 폴더는 과제 폴더와 별도로 보관합니다. `launch`는 해당 프로젝트에서 기존 Codex를 시작하면서 코칭 지침을 전달합니다. 계정·키·전역 설정을 변경하지 않습니다. Codex가 명령 별칭으로만 제공된다면 `launch . --print-prompt`의 내용을 복사해 직접 시작한 Codex에 입력하세요.
+
+처음에는 과제와 안내를 읽고 **이해한 목표 / 빠진 조건 / 다음 행동 하나**를 짧게 제안합니다. 공식 평가표가 없으면 배점을 만들지 않고 확인이 필요한 내용으로 남깁니다. 다음처럼 평소 말로 진행하면 됩니다.
+
+- “아직 코딩하지 말고 이 문제 정의의 빈틈만 짚어줘.”
+- “이 방향으로 정할게. 입력 검증 부분부터 구현해줘.”
+- “지금 결과에서 평가 기준별로 근거가 부족한 곳을 알려줘.”
+- “여기까지 기록하고 다음 세션에서 이어갈 수 있게 해줘.”
+
+## 먼저 체험하기
+
+이 폴더에서 실행하세요. Windows에서는 사용 가능한 `python` 또는 `py`, Linux에서는 보통 `python3`를 사용합니다.
+
+```bash
+python demo.py ./fde-practice
+```
+
+새 연습 폴더를 만들고 예제 실행, 검증, 입력 변경 감지, 재검증, 인수인계 생성까지 진행합니다. 이미 존재하는 폴더는 덮어쓰지 않습니다. 에이전트나 모델을 호출하지 않는 실행 예제입니다.
+
+## 내 프로젝트에 적용하기
+
+```bash
+python fde.py init ./my-project --profile standard --goal "해결할 문제"
+python fde.py launch ./my-project
+```
+
+이후 `my-project` 폴더에서 Codex를 시작하고 평소처럼 요청하세요. 초기화는 프로젝트의 `.agents/skills/fde-kit`에 스킬을 복사하고, 기존 `AGENTS.md`를 보존한 채 안내 문단을 덧붙입니다. 자동 선택이 허용되어 있으며 프로젝트 밖 대화에는 설치되지 않습니다. 목록에 나타나지 않으면 새 세션에서 확인하세요. 명시적으로 요청하려면 `$fde-kit`를 사용할 수 있습니다.
+
+대회 규칙을 가정한 **연습 프로젝트**는 `--profile competition`으로 만듭니다. 개인 계정·전역 설정·기존 서버를 바꾸지 않습니다. 외부 공개 스킬도 자동 설치하지 않습니다.
+
+## 사람이 주로 쓸 명령
+
+프로젝트 폴더에서:
+
+```bash
+python .agents/skills/fde-kit/scripts/fde.py status .
+python .agents/skills/fde-kit/scripts/fde.py coverage .
+python .agents/skills/fde-kit/scripts/fde.py handoff .
+```
+
+작업 추가·위임 범위·검증 명령은 에이전트가 스킬의 [명령 설명](skills/fde-kit/references/cli.md)을 읽어 처리할 수 있습니다. 한 번에 모든 모듈을 실행하지 않으며, 간단한 질문에는 전체 절차를 적용하지 않습니다.
+
+## 채점 기준에 맞추기
+
+실제 문제지·평가표에서 확인한 항목은 `official`, 아직 확인하지 못한 추정은 `assumed`로 출처와 함께 기록합니다. 공식 배점이 명시된 경우에만 `--points`를 넣습니다. 아래 출처와 항목은 사용법 예시이며 실제 과제에 맞게 바꿔야 합니다.
+
+```bash
+python fde.py criterion ./my-project R1 "제출 형식 준수" --basis official --source "문제지 2쪽 제출 형식"
+python fde.py add ./my-project T1 "결과 파일 검사" --acceptance "지정 스키마와 일치" --files result.json check_result.py --criteria R1
+python fde.py coverage ./my-project
+```
+
+`coverage`는 기준에 연결된 작업의 현재 검증 근거를 보여줍니다. 예상 점수나 합격 판정이 아닙니다. 기준이나 결과가 바뀌면 관련 작업의 검증 근거를 다시 확인하게 됩니다.
+
+## 무엇이 기록되는가
+
+| 파일 | 역할 |
+|---|---|
+| `fde-notes/BRIEF.md` | 요구사항, 성공 조건, 제약, 사실과 가정 |
+| `fde-notes/DECISIONS.md` | 선택 이유, 바뀐 판단, 실패한 접근과 남은 한계 |
+| `fde-notes/state.json` | 목표 버전, 사용자 주도 모드, 평가 기준·출처, 작업별 계약·의존관계·상태 |
+| `fde-notes/evidence/` | 실제 검증 명령의 출력과 실행 근거 |
+| `fde-notes/HANDOFF.md` | 새 세션이 읽을 현재 상태 요약; 명령으로 갱신 |
+
+과제에서 지정한 문서와 제출 형식이 우선입니다. 이 기록이 자동으로 제출되거나 평가되는 것은 아닙니다. HANDOFF는 생성 파일이며 직접 작성할 설명은 BRIEF/DECISIONS에 남깁니다.
+
+## 검증 완료의 의미
+
+`ready`는 구현 완료일 뿐입니다. `verify`가 실제 명령을 실행해 종료 코드와 파일 상태를 기록한 뒤에만 `verified`가 됩니다. `status`는 파일, 요구사항 문서, 목표 버전, 작업 계약, 선행 작업의 근거, 검증 로그의 변경을 확인해 오래된 증거를 `needs_verification`으로 표시합니다.
+
+**이 도구가 검증 명령 자체의 품질이나 모든 요구사항 충족을 보증하지는 않습니다.** 의미 있는 테스트를 고르고 관련 입력·코드·테스트·산출물 파일을 선언하는 것은 에이전트와 사용자의 역할입니다. 선언하지 않은 파일의 변화, 환경·라이브러리·외부 데이터 변화는 자동 감지하지 않습니다. 의도적인 기록 조작을 방어하는 보안 감사 도구도 아닙니다.
+
+작업 계약 수정은 다른 쓰기 작업이 없는 동안 state.json을 직접 편집하는 방식입니다. 계약 변경은 기존 근거를 무효화합니다. 여러 CLI 기록 수정은 잠금으로 직렬화되지만 일반 편집기의 파일 수정까지 잠그지는 않습니다. 검증은 백그라운드 서버를 띄우지 않는 유한한 명령으로 실행하세요.
+
+## 포함된 범위
+
+- 상황별로 선택하는 6개 작업 모듈과 자동 선택 메타데이터
+- 사용자 주도 코칭과 공식 평가 기준별 근거 확인
+- 문제 정의·위임·설명 양식
+- 일반 프로젝트 / 대회 연습 프로필
+- 작업 상태·의존성·파일 충돌·근거 변경 확인과 handoff 생성
+- 요청 우선순위 예제와 재현 가능한 검사
+- Superpowers, Ponytail, Spec Kit, Supermemory의 역할을 구분한 [참고 목록](skills/fde-kit/references/sources.md)
+
+외부 프레임워크 전체, 클라우드 메모리, 배포 기능, 에이전트 실행 서비스는 포함하지 않습니다. 스킬은 실제 환경에 있는 도구를 사용하며 없는 에이전트 기능을 만들어내지 않습니다.
+
+## 대회에 가져가기 전
+
+GitHub 공개 여부와 대회 반입 허용 여부는 별개입니다. 당일 안내의 외부 자료·스킬 설치 규칙을 따르세요. 실제 과제·평가표·작업 기록은 이 공개 저장소에 올리지 말고 과제 폴더에 보관하세요.
+
+competition 프로필은 에이전트 행동 지침입니다. 실제 네트워크 차단이나 감독 기능을 구현하지 않습니다. 후속 서술형에서는 AI 사용이 금지된다는 가정을 포함하며, 정확한 당일 규칙이 항상 우선입니다.
+
+## 개발 검증
+
+```bash
+python -m unittest discover -s tests -v
+python -m unittest discover -s examples/request-priority -v
+```
+
+시험용 임시 폴더는 `.test-tmp` 아래에 생성됩니다. 공개 저장소를 배포판에 복제하지 않았으며, 계정·키·모델 인증은 필요하지 않습니다.

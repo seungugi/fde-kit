@@ -1,0 +1,8 @@
+[
+  {"event_id":"e1","request_id":"R1","version":1,"status":"open","priority":2,"received_at":"2026-01-01"},
+  {"event_id":"e1","request_id":"R1","version":1,"status":"open","priority":2,"received_at":"2026-01-01"},
+  {"event_id":"e2","request_id":"R2","version":1,"status":"open","priority":1,"received_at":"2026-01-03"},
+  {"event_id":"e3","request_id":"R3","version":1,"status":"done","priority":1,"received_at":"2026-01-02"},
+  {"event_id":"e4","request_id":"R3","version":2,"status":"open","priority":1,"received_at":"2026-01-02"},
+  {"event_id":"e5","request_id":"R4","version":1,"status":"done","priority":1,"received_at":"2026-01-01"}
+]
