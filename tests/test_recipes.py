@@ -11,6 +11,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 KIT = Path(__file__).resolve().parents[1]
 CLI = KIT / 'recipes.py'
@@ -166,6 +167,33 @@ class RecipeBehavior(unittest.TestCase):
         _, r = self.table('id,team,amount\n' + ''.join(f'{i},A,{n}\n' for i, n in enumerate(numbers)))
         self.assertEqual(Decimal(r['groups'][0]['metrics']['sum']['value']), sum(numbers))
         self.assertEqual(Decimal(r['groups'][0]['metrics']['mean']['value']), sum(numbers) / len(numbers))
+
+    def test_group_names_cannot_be_overwritten_by_report_metadata(self):
+        for column in ('row_count', 'metrics'):
+            conf = self.table_config()
+            conf['schema']['columns'][column] = conf['schema']['columns'].pop('team')
+            conf['group_by'] = [column]
+            _, r = self.table(f'id,{column},amount\n001,A,1\n002,B,2\n', conf)
+            self.assertEqual({g.get('group', g)[column] for g in r['groups']}, {'A', 'B'})
+            self.assertTrue(all(g['row_count'] == 1 for g in r['groups']))
+
+    def test_unreadable_subtree_fails_instead_of_publishing_partial_search(self):
+        self.write('docs/readable.md', 'ordinary information')
+        sys.path.insert(0, str(KIT / 'skills/fde-kit/scripts'))
+        from fde_recipes.cli import main
+        target = self.root / 'partial-search'
+        real_walk = os.walk
+        def walk_with_denied_subtree(root, topdown=True, onerror=None, followlinks=False):
+            if Path(root) != self.root / 'docs':
+                yield from real_walk(root, topdown=topdown, onerror=onerror, followlinks=followlinks)
+                return
+            yield str(root), [], ['readable.md']
+            if onerror:
+                onerror(PermissionError(13, 'Permission denied', str(Path(root) / 'private')))
+        with patch('os.walk', side_effect=walk_with_denied_subtree):
+            result = main(['search', str(self.root / 'docs'), '--query', 'policy', '--out', str(target)])
+        self.assertEqual(result, 2)
+        self.assertFalse((target / 'manifest.json').exists())
 
     def test_existing_output_and_source_are_preserved(self):
         data = self.write('input.csv', 'id,team,amount\n001,A,1\n')

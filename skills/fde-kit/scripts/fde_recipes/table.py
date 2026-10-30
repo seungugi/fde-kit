@@ -16,7 +16,7 @@ def run(args):
     aggregates = config['aggregates']
     require(isinstance(aggregates, dict) and 0 < len(aggregates) <= 20, 'Declare 1..20 aggregates.')
     for name, spec in aggregates.items():
-        require(name and name not in groups and name != 'row_count', 'Aggregate name collides with a group/count.')
+        require(isinstance(name, str) and name.strip(), 'Aggregate name must be nonempty.')
         keys(spec, ('column', 'op'), ('column', 'op'))
         require(spec['column'] in header and config['schema']['columns'][spec['column']]['type'] == 'number',
                 'Aggregate column must be numeric.')
@@ -29,7 +29,7 @@ def run(args):
     require(len(buckets) * len(aggregates) <= 100000, 'Too many group/metric combinations.')
     result = []
     for group, members in sorted(buckets.items(), key=lambda kv: dump(kv[0])):
-        entry = {**dict(zip(groups, group)), 'row_count': len(members), 'metrics': {}}
+        entry = {'group': dict(zip(groups, group)), 'row_count': len(members), 'metrics': {}}
         for name, spec in aggregates.items():
             numbers = [r[spec['column']] for r in members if r[spec['column']] is not None]
             value = None
@@ -49,7 +49,7 @@ def run(args):
              'Aggregates describe accepted records only; exclusions can bias conclusions.', '',
              '| Group | Rows | Metric | Value | Nonmissing denominator |', '|---|---:|---|---|---:|']
     for entry in result[:100]:
-        label = ', '.join(f'{g}={entry[g]}' for g in groups) or 'all'
+        label = ', '.join(f"{g}={entry['group'][g]}" for g in groups) or 'all'
         for name, metric in entry['metrics'].items():
             lines.append(f"| {markdown(label)} | {entry['row_count']} | {markdown(name)} | {markdown(metric['value'])} | {metric['nonmissing_count']} |")
     lines += ['', 'Full groups, row references and exclusion reasons: result.json.',

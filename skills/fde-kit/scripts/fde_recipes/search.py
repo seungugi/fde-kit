@@ -31,7 +31,9 @@ def documents(root):
     root = no_links(root)
     require(root.is_dir(), 'Document root must be a directory.')
     records, chunks, total = [], [], 0
-    for folder, dirs, files in os.walk(root, followlinks=False):
+    def traversal_error(error):
+        raise OSError(f'Cannot read document directory: {error}') from error
+    for folder, dirs, files in os.walk(root, followlinks=False, onerror=traversal_error):
         dirs[:] = sorted(d for d in dirs if not d.startswith('.') and d not in ('node_modules', '__pycache__', 'fde-notes'))
         for name in dirs:
             no_links(Path(folder) / name)

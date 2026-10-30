@@ -34,6 +34,8 @@ Configuration: `schema`, optional `group_by` (up to 8 unique columns), nonempty 
 
 Output reports group row_count and each metric's nonmissing_count. Missing amounts are not zero; an all-missing group has a null metric. Empty input or zero valid rows fails instead of publishing successful analysis.
 
+Each group object keeps original grouping values under `group`, separately from `row_count` and `metrics`. Input names such as row_count or metrics therefore keep their original identity.
+
 Artifacts: result.json (canonical typed rows, exclusions, aggregates), clean.csv (spreadsheet-safe display export), report.md, manifest.json. Formula-like text is prefixed with an apostrophe only in CSV; use canonical JSON for subsequent logic. Markdown previews the first 100 groups; JSON contains all groups. Exclusions can bias conclusions despite correct arithmetic.
 
 Independent checks: input = accepted + excluded; known sums and denominators; duplicate/missing/invalid handling; correct units and period. Do not calculate expected values by calling the implementation's aggregation function.
@@ -53,6 +55,8 @@ Independent checks: exact threshold and above/below; precedence; missing decisiv
 ## 3. Documents → cited excerpts
 
 Source formats: UTF-8 .md/.txt under an explicitly chosen directory. PDF/OCR, spreadsheet and image conversion is separate and must be checked. Hidden paths, node_modules, __pycache__ and fde-notes are skipped. Output cannot be inside the document tree.
+
+An unreadable included directory/file fails the search; a partial collection is not silently published as complete.
 
 BM25 lexical retrieval: lowercase English tokens and Korean character bigrams. Default min-score is 0, but a positive token match is required. `--min-score` is optional and is not calibrated confidence; `--top` is 1..20. No matches returns `no_evidence`, with no invented answer. Empty or tokenless collections are invalid input.
 

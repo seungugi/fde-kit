@@ -38,7 +38,7 @@ def check(kind):
     result = json.loads((directory / 'result.json').read_text(encoding='utf-8'))
     if kind == 'table':
         require(result['counts'] == {'input': 9, 'accepted': 6, 'excluded': 3}, 'Row accounting mismatch.')
-        groups = {g['team']: g for g in result['groups']}
+        groups = {g['group']['team']: g for g in result['groups']}
         require(groups['ops']['metrics']['total_amount']['value'] == '20.4', 'Ops total must be 20.40.')
         require(groups['sales']['metrics']['total_amount']['value'] == '20.2', 'Sales total must be 20.20.')
         require(groups['sales']['metrics']['mean_amount']['nonmissing_count'] == 1, 'Missing amount became zero.')
