@@ -11,7 +11,7 @@ Move an unfamiliar problem to an explainable, verified deliverable. Preserve the
 
 Use [user-led coaching](references/coach.md). The user chooses the direction, priorities and scope. Surface gaps, challenge weak assumptions with reasons and recommend a concrete next step. Perform the currently requested work fully, including checks; do not jump from a request for diagnosis or advice to implementing the whole project. Do not ask again for permission already given for that step.
 
-For competition work, also read [rubric alignment](references/rubric.md). Use the actual supplied criteria. When none are available, report that gap and keep useful working criteria labeled as assumptions. Never invent official weights, hidden tests or predicted scores.
+At the start or resumption of competition work, read the [competition restrictions](references/profiles.md#competition-restrictions) before choosing tools or models, including the prohibition on Computer Use at every stage and the Astra restriction. Also read [rubric alignment](references/rubric.md). Use the actual supplied criteria. When none are available, report that gap and keep useful working criteria labeled as assumptions. Never invent official weights, hidden tests or predicted scores.
 
 ## First action
 
