@@ -1,4 +1,22 @@
-# Validation — v0.3 / 2026-10-30
+# Validation — v0.4 / 2026-10-30
+
+## Current v0.4 checks
+
+Windows / Python 3.13, with no added runtime dependencies:
+
+- `python -m unittest discover -s tests -p test_fde.py -v`: 30 passed. Seven added tests exercise direct verification plus handoff, failed retries replacing a green snapshot, timeouts and input mutation, user-owned handoff preservation before execution, active ownership/dependency guards, progress-versus-requirement changes, and the installed semantic-negative example (also under `python -O`).
+- `python -m unittest discover -s tests -p 'test_recipe*.py' -v`: 46 passed, 1 skipped. All three existing execution recipes and installed lifecycle are retained. The host still cannot create the symlink used by one test; the Windows junction test ran and passed.
+- `python -m unittest discover -s examples/request-priority -v`: 6 passed.
+- `python demo_negative_check.py`: accepted the agreed example and rejected a plausible wrong result with unchanged row count and IDs; original example bytes were preserved.
+- Skill-creator `quick_validate.py` in UTF-8 mode: valid.
+
+Total distinct automated test cases: **82 passed, 1 skipped, 0 failed**. No new independent-agent evaluation is claimed for this version. The short lifecycle is exercised by the existing real demo integration test, which also damages the delivered result and confirms rejection.
+
+The reduction is in bookkeeping: after initialization, single-owner `add → verify --handoff` replaces separate add/start/ready/verify/handoff calls. Implementation, meaningful check construction and reading the results are still required. There is no measured claim of overall time savings or domain coverage. BRIEF hashing, dependencies, evidence freshness, competition restrictions and schema 1 remain in place.
+
+The sections below are historical validation of earlier versions, not additional v0.4 runs.
+
+## Historical v0.3 / 2026-10-30
 
 ## Current change
 

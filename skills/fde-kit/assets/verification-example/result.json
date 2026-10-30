@@ -1,0 +1,5 @@
+[
+  {"id": "R1", "status": "pending", "remaining": "Attach labels"},
+  {"id": "R2", "status": "complete", "remaining": ""},
+  {"id": "R3", "status": "review", "remaining": "Confirm changed quantity"}
+]
