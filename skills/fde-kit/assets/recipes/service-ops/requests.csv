@@ -1,0 +1,10 @@
+request_id,team,severity,age_hours,amount
+001,ops,high,12,10.10
+002,sales,normal,24,20.20
+003,ops,high,48,0.30
+004,ops,normal,-1,5.00
+005,sales,normal,2,
+006,ops,normal,10,9.90
+007,ops,unknown,3,1.00
+008,ops,normal,4,NaN
+009,ops,normal,1,0.10

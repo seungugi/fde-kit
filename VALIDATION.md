@@ -1,4 +1,16 @@
-# Validation — 2026-10-29
+# Validation — v0.3 / 2026-10-30
+
+## Current change
+
+Windows, Python 3.13.5: `python -m unittest discover -s tests -v` discovered 68 tests: 67 passed, 1 skipped, no failures. Includes 23 existing CLI regressions, 44 recipe tests and 1 installed lifecycle test. The skipped test could not create a symlink under this host's permissions; a real Windows junction escape test passed.
+
+The installed lifecycle ran all three recipes in a Unicode/spaced project path, checked known business outputs independently, recorded verified tasks and generated handoff. It also rejected changed inputs, output bytes, recipe code and an added document. [AUDIT.md](AUDIT.md) details reproduced findings, fixes and limits. These checks were authored/executed in the same implementation session; they are not a fresh-agent or external audit.
+
+Additional current checks: original request-priority example 6/6 passed; official skill-creator quick_validate passed with Python UTF-8 mode; all local Markdown file links resolved; all Python source parsed using Python 3.10 grammar. This syntax check is not execution on a Python 3.10 runtime. Total executed test cases across both suites: 73 passed, 1 skipped.
+
+The following 2026-10-29 section is retained as historical evidence for v0.2. It does not imply the new recipe behavior received the same historical independent-agent evaluation.
+
+## Historical validation — 2026-10-29
 
 ## Executed checks
 

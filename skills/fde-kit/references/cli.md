@@ -2,6 +2,8 @@
 
 Python 3.10+; no package installation. From the package use `python fde.py`. After project initialization use `python .agents/skills/fde-kit/scripts/fde.py`. On Linux, use `python3` if required. Paths containing spaces must be quoted.
 
+Execution recipes are separate from the state CLI: use `python recipes.py` from the package or `python .agents/skills/fde-kit/scripts/recipes.py` after initialization. See [recipe contracts and examples](recipes.md). They generate outputs; `fde.py verify` records a separate acceptance check. No new state-transition semantics are introduced.
+
 ```bash
 python fde.py init ./project --profile competition --goal "Prioritize support requests"
 python fde.py launch ./project
