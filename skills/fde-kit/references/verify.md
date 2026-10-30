@@ -12,6 +12,8 @@ The CLI stores file SHA-256 hashes, brief hash, goal revision, task contract, de
 
 For a document or analysis, combine executable structural/data checks with a recorded human/agent review against concrete criteria. Report the review's scope and remaining uncertainty; do not claim the CLI proved qualitative quality.
 
+For [execution recipes](recipes.md), require row accounting and independently calculated business expectations, not just a successful generation command or manifest hashes. Include the configuration, source files, checker, generated artifacts and relevant recipe code in `--files`. A new file added to a document directory is not detected by hashes of previously declared files: reconcile the current inventory before reusing evidence and update the task contract when it changes. Verify citations against the actual file and line span. Review source authority, contradictions and freshness yourself; lexical matches do not establish an answer.
+
 **Exit:** Current evidence supports the acceptance conditions; important limits are stated. Run the necessary integration check after combining independently tested work.
 **Fallback:** After two repetitions of the same failure without new evidence, stop blind retries and investigate the cause. Change the hypothesis, collect a missing observation or reduce optional scope. This is a recommended investigation trigger, not permission to abandon mandatory work.
 

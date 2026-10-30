@@ -1,0 +1,17 @@
+{
+  "schema": {
+    "id_column": "request_id",
+    "columns": {
+      "request_id": {"type": "string"},
+      "team": {"type": "string", "choices": ["ops", "sales"]},
+      "severity": {"type": "string", "choices": ["high", "normal"]},
+      "age_hours": {"type": "number", "min": "0"},
+      "amount": {"type": "number", "required": false, "min": "0"}
+    }
+  },
+  "group_by": ["team"],
+  "aggregates": {
+    "total_amount": {"column": "amount", "op": "sum"},
+    "mean_amount": {"column": "amount", "op": "mean"}
+  }
+}

@@ -1,4 +1,16 @@
-# Validation — 2026-10-29
+# Validation — v0.3 / 2026-10-30
+
+## Current change
+
+Windows, Python 3.13.5: the initial `python -m unittest discover -s tests -v` run discovered 68 tests: 67 passed, 1 skipped, no failures. After two additional GitHub review findings were fixed, `python -m unittest discover -s tests -p 'test_recipe*.py' -v` ran 47 tests: 46 passed, 1 skipped. Combined current coverage: 23 existing CLI regressions, 46 recipe tests and 1 installed lifecycle test. The skipped test could not create a symlink under this host's permissions; a real Windows junction escape test passed.
+
+The installed lifecycle ran all three recipes in a Unicode/spaced project path, checked known business outputs independently, recorded verified tasks and generated handoff. It also rejected changed inputs, output bytes, recipe code and an added document. [AUDIT.md](AUDIT.md) details findings, fixes and limits. Tests were authored/executed in this implementation session. The repository's separate GitHub Codex review reported grouping-key collisions and silently skipped unreadable directories; both were reproduced and fixed with regression checks. No post-fix approval by that reviewer is claimed.
+
+Additional current checks: original request-priority example 6/6 passed; official skill-creator quick_validate passed with Python UTF-8 mode; all local Markdown file links resolved; all Python source parsed using Python 3.10 grammar. This syntax check is not execution on a Python 3.10 runtime. Total distinct current test cases across both suites: 75 passed, 1 skipped.
+
+The following 2026-10-29 section is retained as historical evidence for v0.2. It does not imply the new recipe behavior received the same historical independent-agent evaluation.
+
+## Historical validation — 2026-10-29
 
 ## Executed checks
 

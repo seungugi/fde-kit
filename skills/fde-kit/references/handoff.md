@@ -8,6 +8,8 @@ When the goal changes, run `intent --goal ... --reason ...` and update BRIEF con
 
 Generate HANDOFF only after status reflects current files. The CLI emits effective states, acceptance, ownership, paths, last command/log, attempts and the next dependency-ready task. Keep rationale, failed approaches and unresolved limitations in DECISIONS. Refer to their source; do not copy entire chat transcripts.
 
+For execution recipes, record which input/schema/rule version and output run directory are current, how exclusions/review rows were handled, and what evidence was missing. A recipe's result or manifest does not replace the independent verification log. Reconcile the source-file inventory on resume; undeclared new documents are outside file-hash tracking.
+
 On resume, read the original task, BRIEF and DECISIONS, run status, then use HANDOFF. A file can remain labeled `verified` in stored state while its effective status is `needs_verification`; always use effective status. Check current artifacts instead of trusting the snapshot or another agent's completion claim.
 
 **Exit:** A new session can identify the current goal, what is actually verified, what changed, the main unknown and one useful next action.
