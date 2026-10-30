@@ -1,21 +1,10 @@
 # Problem brief
 
-The current goal and its revision are recorded in state.json. Keep this document consistent with it; changes here invalidate earlier verification.
+Keep current requirements consistent with the goal in state.json. Brief edits invalidate earlier verification; progress and rationale belong in DECISIONS.md.
 
-## User and current workflow
-Identify the user, input and the job they need to finish.
+- User/job and authorized scope: who needs to do what; cite the user's requirement or existing task document.
+- Input → deliverable: relevant input, required output path/format and expected behavior, including a consequential failure/boundary case.
+- Constraints: environment, tools, deadline, data boundaries and excluded scope, as applicable.
+- Unknowns: label assumptions and the unanswered question that would change the solution. Link actual assessment criteria if supplied; do not invent weights.
 
-## Required deliverables and acceptance
-For each deliverable, record its required path/format and a checkable outcome. Cite the supplied requirement or user decision.
-
-## User decisions and assessment sources
-Record the user's chosen direction, current authorized step and unresolved decisions. Locate the actual rubric or state that it is unavailable. Register sourced criteria with the CLI; label provisional working criteria as assumptions and leave unknown point values unset.
-
-## Constraints and excluded scope
-Record environment, permitted tools, deadline, data boundaries and explicitly excluded work.
-
-## Facts, assumptions and questions
-Keep confirmed facts separate from assumptions. State which unanswered question would materially change the solution.
-
-## Small example and expected result
-Record an input and expected result derived independently from the requirement, including a relevant boundary case.
+A few completed bullets are enough for a small task. Expand only when decisions or independently checkable outputs require it; no separate interview or plan document is mandatory.

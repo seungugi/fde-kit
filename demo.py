@@ -23,10 +23,8 @@ fde('init', project, '--profile', 'competition', '--goal', 'Create a verified re
 fde('add', project, 'T1', 'Generate and verify request queue', '--acceptance',
     'Sample order is R3,R2,R1; duplicate/conflict/reopening behavior follows README.',
     '--files', 'README.md', 'queue_requests.py', 'events.json', 'test_queue.py', 'check_delivery.py', 'result.json')
-fde('start', project, 'T1')
 subprocess.run([sys.executable, 'queue_requests.py', 'events.json', 'result.json'], cwd=project, check=True)
-fde('ready', project, 'T1')
-fde('verify', project, 'T1', '--', sys.executable, 'check_delivery.py')
+fde('verify', '--handoff', project, 'T1', '--', sys.executable, 'check_delivery.py')
 result = json.loads((project / 'result.json').read_text(encoding='utf-8'))
 assert [row['request_id'] for row in result] == ['R3', 'R2', 'R1']
 # A harmless input-file edit still requires fresh evidence.
@@ -35,7 +33,6 @@ with (project / 'events.json').open('a', encoding='utf-8') as target:
 snapshot = subprocess.check_output([sys.executable, str(kit / 'fde.py'), 'status', str(project), '--json'], encoding='utf-8')
 assert json.loads(snapshot)['tasks']['T1']['effective_status'] == 'needs_verification'
 print('Input changed: old evidence correctly became needs_verification.', flush=True)
-fde('verify', project, 'T1', '--', sys.executable, 'check_delivery.py')
-fde('handoff', project)
+fde('verify', '--handoff', project, 'T1', '--', sys.executable, 'check_delivery.py')
 fde('status', project)
 print(f'\nDemo complete: {project}', flush=True)

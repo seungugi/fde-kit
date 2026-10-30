@@ -108,6 +108,93 @@ class KitBehavior(unittest.TestCase):
         self.assertEqual(attempt['exit_code'], 0)
         self.assertTrue((self.project / attempt['log']).is_file())
 
+    def test_short_workflow_verifies_once_and_generates_handoff(self):
+        self.init()
+        self.add()
+        self.call('verify', '--handoff', self.project, 'T1', '--', sys.executable, '-c',
+                  "from pathlib import Path; assert Path('T1.txt').read_text() == 'ready'")
+        task = self.state()['tasks']['T1']
+        self.assertEqual(task['effective_status'], 'verified')
+        self.assertEqual(len(task['attempts']), 1)
+        handoff = (self.project / 'fde-notes/HANDOFF.md').read_text(encoding='utf-8')
+        self.assertIn(task['attempts'][0]['log'], handoff)
+        self.assertIn('Status: verified', handoff)
+
+    def test_short_workflow_failed_retry_replaces_green_handoff(self):
+        self.init()
+        self.add()
+        self.call('verify', '--handoff', self.project, 'T1', '--', sys.executable, '-c', 'pass')
+        self.call('verify', '--handoff', self.project, 'T1', '--', sys.executable, '-c',
+                  'raise SystemExit(7)', ok=1)
+        self.assertEqual(self.status(), 'failed')
+        handoff = (self.project / 'fde-notes/HANDOFF.md').read_text(encoding='utf-8')
+        self.assertIn('Status: failed', handoff)
+        self.assertNotIn('Status: verified', handoff)
+        self.assertIn('Review and advance T1', handoff)
+
+    def test_short_workflow_keeps_timeout_and_mutation_guards(self):
+        self.init()
+        self.add()
+        self.call('verify', '--handoff', '--timeout', '0.1', self.project, 'T1', '--',
+                  sys.executable, '-c', 'import time; time.sleep(2)', ok=1)
+        self.assertTrue(self.state()['tasks']['T1']['attempts'][-1]['timed_out'])
+        self.call('verify', '--handoff', self.project, 'T1', '--', sys.executable, '-c',
+                  "from pathlib import Path; Path('T1.txt').write_text('changed')", ok=1)
+        self.assertEqual(self.status(), 'failed')
+        self.assertIn('Status: failed', (self.project / 'fde-notes/HANDOFF.md').read_text())
+
+    def test_short_workflow_preserves_user_handoff_before_execution(self):
+        self.init()
+        self.add()
+        path = self.project / 'fde-notes/HANDOFF.md'
+        path.write_bytes(b'User handoff\r\n')
+        self.call('verify', '--handoff', self.project, 'T1', '--', sys.executable, '-c',
+                  "from pathlib import Path; Path('ran.txt').write_text('ran')", ok=2)
+        self.assertEqual(path.read_bytes(), b'User handoff\r\n')
+        self.assertFalse((self.project / 'ran.txt').exists())
+        self.assertEqual(self.state()['tasks']['T1']['attempts'], [])
+
+    def test_direct_verify_cannot_bypass_active_ownership_or_dependencies(self):
+        self.init()
+        self.add()
+        self.call('add', self.project, 'T2', 'Shared reader', '--acceptance', 'Ready', '--files', 'T1.txt')
+        self.call('start', self.project, 'T1')
+        self.call('verify', '--handoff', self.project, 'T2', '--', sys.executable, '-c', 'pass', ok=2)
+        self.assertEqual(self.state()['tasks']['T2']['attempts'], [])
+        self.add('T3', ['T1'])
+        self.call('verify', '--handoff', self.project, 'T3', '--', sys.executable, '-c', 'pass', ok=2)
+        self.assertEqual(self.state()['tasks']['T3']['attempts'], [])
+
+    def test_progress_notes_preserve_proof_but_requirements_do_not(self):
+        self.init()
+        self.add()
+        self.verify()
+        (self.project / 'fde-notes/DECISIONS.md').write_text('Progress: explained the unchanged output.')
+        self.assertEqual(self.status(), 'verified')
+        (self.project / 'fde-notes/BRIEF.md').write_text('Output must contain a new field.')
+        self.assertEqual(self.status(), 'needs_verification')
+
+    def test_installed_negative_example_rejects_plausible_wrong_output(self):
+        self.init()
+        example = self.project / '.agents/skills/fde-kit/assets/verification-example'
+        checker = example / 'check_result.py'
+        original = (example / 'result.json').read_bytes()
+        actual = self.project / 'result.json'
+        actual.write_bytes(original)
+        def check(expected):
+            result = subprocess.run([sys.executable, '-O', str(checker), str(actual)], capture_output=True)
+            self.assertEqual(result.returncode, expected, result.stdout + result.stderr)
+        check(0)
+        rows = json.loads(original)
+        rows[0]['status'], rows[0]['remaining'] = 'complete', ''
+        actual.write_text(json.dumps(rows), encoding='utf-8')
+        check(1)
+        actual.write_text('[]', encoding='utf-8')
+        check(1)
+        actual.write_text('invalid JSON', encoding='utf-8')
+        check(2)
+        self.assertEqual((example / 'result.json').read_bytes(), original)
+
     def test_source_brief_and_goal_changes_invalidate_evidence(self):
         self.init()
         self.add()

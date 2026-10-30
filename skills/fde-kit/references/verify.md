@@ -6,7 +6,11 @@
 
 Use a check derived from the requirement. Include a supplied example, an independently determined expected result and important boundary/failure cases. Test the actual output interface where relevant. A model's repeated agreement or a command that merely prints “OK” proves nothing about correctness.
 
+When plausible wrong results are a material risk, challenge the checker with a disposable copy: change one business-critical value while preserving valid syntax and row counts, and confirm it fails. Keep the original output intact and never use the intentional failure as evidence of product success. The [runnable example](../assets/verification-example/README.md) rejects a partly finished job marked complete even though the JSON and IDs are valid. Adapt its expected values from actual requirements; the bundled cases do not certify another product.
+
 Run `verify` with an argv command after `--`; no shell is inserted. Read the resulting log. A command must finish successfully without changing declared watched files or the brief. Use implementation commands separately if they generate artifacts; verification should inspect those artifacts. A failed process, timeout, missing input or changed file cannot be verified.
+
+For a small single-owner task, use `verify --handoff <project> <id> -- <check command>` for the first real check rather than running it once directly and again only for bookkeeping. Separate `start`/`ready` and a later `handoff` call are unnecessary in this path. Inspect the evidence and current state regardless of the command's exit status.
 
 The CLI stores file SHA-256 hashes, brief hash, goal revision, task contract, dependency evidence IDs, exit code and log hash. Later `status` recomputes validity. Changed files/brief/goal/dependency evidence/log require renewed verification. This is accidental-staleness detection, not a tamper-proof audit or semantic proof. Add every relevant file to the contract, including validation code. Do not edit state JSON to manufacture success.
 
