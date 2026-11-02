@@ -2,9 +2,9 @@
 
 Keep current requirements consistent with the goal in state.json. Brief edits invalidate earlier verification; progress and rationale belong in DECISIONS.md.
 
-- User/job and authorized scope: who needs to do what; cite the user's requirement or existing task document.
-- Input → deliverable: relevant input, required output path/format and expected behavior, including a consequential failure/boundary case.
-- Constraints: environment, tools, deadline, data boundaries and excluded scope, as applicable.
-- Unknowns: label assumptions and the unanswered question that would change the solution. Link actual assessment criteria if supplied; do not invent weights.
+- Mandatory requirements: source/section → required behavior → input/output condition → check → unresolved detail. Reference existing task documents; do not duplicate their full text.
+- User/job and first working path: who uses the result for what action; input → processing → usable required output. Distinguish mandatory work from optional improvement.
+- Constraints and data: deadline, environment, submission paths/formats, data boundaries and observed input issues that affect correctness.
+- Clarifications: stakeholder-supplied rules, their sources and consequences; separate these from proposals and assumptions. Keep only questions whose answers would change the solution. Do not invent weights.
 
 A few completed bullets are enough for a small task. Expand only when decisions or independently checkable outputs require it; no separate interview or plan document is mandatory.

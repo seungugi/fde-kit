@@ -17,7 +17,7 @@ def cli(*args):
     return subprocess.run([sys.executable, str(KIT / 'fde.py'), *map(str, args)], check=True)
 
 
-cli('init', project, '--profile', 'competition', '--goal', 'Summarize, prioritize and explain service requests')
+cli('init', project, '--full', '--profile', 'competition', '--goal', 'Summarize, prioritize and explain service requests')
 (project / 'fde-notes/BRIEF.md').write_text(
     '# Synthetic service operations\n\nTask source: README.md and docs/operations.md.\n'
     'Acceptance: 9 = 6 valid + 3 review; ops 20.40, sales 20.20; queue 003,001,002,005,006,009; cited 24-hour rule.\n'
@@ -37,13 +37,10 @@ for index, kind in enumerate(('table', 'decide', 'search'), 1):
     if index > 1:
         args += ['--depends', f'T{index - 1}']
     cli(*args)
-    cli('start', project, ident)
     command = ([kind, 'docs', '--query', '긴급 요청 처리 기준'] if kind == 'search' else
                [kind, 'requests.csv', '--config', 'table.json' if kind == 'table' else 'decision.json'])
     subprocess.run([sys.executable, runner, *command, '--out', 'outputs/' + kind], cwd=project, check=True)
-    cli('ready', project, ident)
-    cli('verify', project, ident, '--', sys.executable, 'check_delivery.py', kind)
-cli('handoff', project)
+    cli('verify', '--handoff', project, ident, '--', sys.executable, 'check_delivery.py', kind)
 cli('coverage', project)
 state = json.loads(subprocess.check_output([sys.executable, str(KIT / 'fde.py'), 'status', str(project), '--json'], encoding='utf-8'))
 if not all(t['effective_status'] == 'verified' for t in state['tasks'].values()):

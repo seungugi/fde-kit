@@ -4,6 +4,10 @@
 **Inputs:** Brief, decision, current task statuses, tool availability and deadline.
 **Output:** Small task contracts and implemented results; `implemented` is not `verified`.
 
+Start from the required input→processing→usable result path in the existing project. Include interaction, persistence and delivery only as required by the task. Establish a working baseline before optional optimization or visual polish; do not defer mandatory validation, capacity, access or other hard constraints. Check the critical assumption early, then test the complete path when connected. Reuse still-valid evidence rather than rerunning checks solely to record a phase.
+
+Add a source file when it has a distinct responsibility or makes the actual behavior easier to test or maintain. Do not pre-create empty modules, future extension layers or parallel plans. Do not collapse necessary separation into a monolith to meet a file-count target. Reuse prescribed README/PRD and existing records. CLI state, evidence and handoff are generated records, not extra documents the user must author.
+
 ## Small single-owner work
 
 Use this path for one independently checkable deliverable owned by one agent. A short paragraph or a few bullets in BRIEF can cover the user/job, input→output, constraints and concrete expected cases. Reference existing requirements rather than copying them. Put only consequential choices or operational unknowns in DECISIONS; separate interview/plan/explanation documents are optional.

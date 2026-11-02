@@ -4,7 +4,7 @@ Use only the recipe matching the confirmed task. These are local, deterministic 
 
 ## Run and interpret
 
-Use `python recipes.py` in the repository, or `python .agents/skills/fde-kit/scripts/recipes.py` after project initialization.
+Recipes and runnable examples are optional. Default `init` does not copy them into the project. Use the full repository's `recipes.py` with the task as the working directory, or run `python <full-kit>/fde.py init <project> --full` from the same kit version to add them without changing records. Then use `python .agents/skills/fde-kit/scripts/recipes.py`. A core-only installed copy cannot supply missing assets and performs no download. See [installation semantics](cli.md).
 
 ```bash
 python recipes.py table requests.csv --config table.json --out outputs/table-run1
@@ -12,7 +12,7 @@ python recipes.py decide requests.csv --config decision.json --out outputs/decis
 python recipes.py search docs --query "긴급 요청 처리 기준" --out outputs/search-run1
 ```
 
-Runnable [sample](../assets/recipes/service-ops/README.md), [table config](../assets/recipes/service-ops/table.json), [decision config](../assets/recipes/service-ops/decision.json). Copy only needed assets into the task workspace and adapt their contracts. `demo_recipes.py` in the repository demonstrates init/add/start/ready/verify/handoff for all three.
+The full package contains the runnable sample at `assets/recipes/service-ops/README.md` and its `table.json` and `decision.json` under the skill directory. Copy only needed assets and adapt their contracts; do not load all recipes for an unrelated problem. `demo_recipes.py` in the repository demonstrates explicit full installation and add → generate → verify --handoff for all three.
 
 Exit 0 means generation completed, including `no_evidence` from a valid search or a queue requiring review. It does **not** mean accepted business outcomes. Exit 2 means invalid input/configuration, unsupported data, resource limit or output conflict. Read `result.json.status`, counts and review flags. Existing output directories are preserved: choose a new run directory and update the checker/task contract to those artifacts. A directory without manifest.json is incomplete. A complete manifest records hashes, not semantic correctness or protection against a hostile local writer.
 
@@ -66,10 +66,10 @@ Limits: 200 files, 2 MiB each, 16 MiB total, 12,000 chunks, 8,000 characters per
 
 ## Existing workflow integration
 
-1. Discover: agree user, decision, units, exclusions and checkable outputs in BRIEF.
-2. Decide: select recipe/config; record who supplied the rules and why.
-3. Execute: add source/config/code/checker/output files to the task, start it and generate into a new directory.
-4. Verify: ready, then a separate acceptance checker via `fde.py verify`. Check current input/code hashes against the manifest and test independently calculated expectations. Include every input document in the task. New directory entries are not automatically tracked.
-5. Handoff: current run directory, exclusions/review items, missing evidence and one next action. Reconcile BRIEF, source inventory and status on resume.
+1. Discover: read task requirements and actual data; connect units, exclusions and required outputs to sources and checks in BRIEF.
+2. Decide: use a matching recipe only if it reduces the work; record the source of its business rules. Otherwise use the existing project or a small implementation.
+3. Execute: register source/config/actual implementation/checker/output files and generate into a new directory. For single-owner work, `start`/`ready` are unnecessary; use the [short workflow](execute.md#small-single-owner-work).
+4. Verify: run the independent acceptance checker through `fde.py verify --handoff` once. Check provenance and independently calculated expectations. Include every relevant input; newly added directory entries are not automatically tracked.
+5. Reuse the resulting handoff; do not create another just to complete a checklist. Reconcile the run directory, exclusions, source inventory and status on resume. Use explicit ownership steps only for actual coordinated work.
 
 The supplied checker proves only the synthetic sample's expectations. Adapt it to actual requirements. Hashes and a successful process establish provenance/execution, not business truth. [Competition restrictions](profiles.md) on Computer Use and Astra remain in force.

@@ -2,7 +2,9 @@
 
 Python 3.10+; no package installation. From the package use `python fde.py`. After project initialization use `python .agents/skills/fde-kit/scripts/fde.py`. On Linux, use `python3` if required. Paths containing spaces must be quoted.
 
-Execution recipes are separate from the state CLI: use `python recipes.py` from the package or `python .agents/skills/fde-kit/scripts/recipes.py` after initialization. See [recipe contracts and examples](recipes.md). They generate outputs; `fde.py verify` records a separate acceptance check. No new state-transition semantics are introduced.
+Default `init` installs the workflow/record CLI without optional recipe code or runnable examples. To add these when needed, run `python <full-kit>/fde.py init <project> --full` from the matching full repository. A core-only installed CLI cannot provide missing assets. No network downloads occur. Core and full use identical state and verification semantics; these installation choices are independent of standard/competition profiles.
+
+Execution recipes are separate: use the full package's `recipes.py`, or the installed `scripts/recipes.py` after `init --full`. See [recipe contracts and examples](recipes.md). They generate outputs; `fde.py verify` records a separate acceptance check.
 
 Small single-owner work: after `init` and a short brief, `add` the deliverable, implement it, then run `verify --handoff ./project T1 -- python check_report.py`. This skips optional `start`/`ready` records and refreshes handoff with the check result. Keep the full sequence below for coordinated work. Existing commands and schema-1 records remain supported.
 
@@ -20,7 +22,7 @@ python fde.py handoff ./project
 python fde.py intent ./project --goal "Include reopened requests" --reason "User clarified the workflow"
 ```
 
-- `init`: project-local skill copy, a bounded addition to existing AGENTS.md, and records. Repeating unchanged setup preserves existing files; a modified/different skill is a conflict, not an overwrite.
+- `init`: core project-local skill copy, a bounded addition to existing AGENTS.md, and records. `--full` includes optional recipe code and examples. Matching core→full installation only adds missing optional files; it preserves existing files, state and evidence. Repeating default init on an existing full copy keeps its optional files. Modified/different/partial installations remain conflicts, not overwrites; upgrade versions by review and explicit replacement as before.
 - `launch`: starts the supplied `codex` in the project with a user-led starter prompt. Requires prior init. It uses normal Codex authentication, model and permission settings; it neither installs a CLI nor supplies credentials. `--print-prompt` previews the prompt without starting Codex. If Codex is only a shell alias/function, start it manually in the project with that prompt.
 - `criterion`: register/update an ID, title, `--basis official|assumed` and `--source`. Optional `--points` is the documented official maximum, never a prediction. Invalid/unknown points stay unset; assumed points are rejected.
 - `coverage`: source-aware task/evidence mapping, with optional `--json`. No estimated score or automatic claim of rubric satisfaction.

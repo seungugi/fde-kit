@@ -17,7 +17,11 @@ At the start or resumption of competition work, read the [competition restrictio
 
 Read the original task and the project's existing instructions. If `fde-notes/state.json` exists, read `fde-notes/BRIEF.md` and run `python <this-skill>/scripts/fde.py status <project>`. Read HANDOFF.md if it exists, as a snapshot to reconcile with current files. New projects have no handoff yet; fill the brief rather than treating its absence as an error. An old “done” statement is not current verification.
 
+For an unfamiliar task, inspect the task README and supplied inputs before selecting stakeholder questions or an implementation. Use [Discover](references/discover.md) to connect mandatory behavior, input/output constraints and checks to their sources. Distinguish task requirements, stakeholder clarifications and your proposals. Missing task documents are a gap, not permission to invent them. Build the smallest working path covering mandatory behavior before optional optimization; hard constraints apply from the first version.
+
 For a new project, initialize only when useful: `python <this-skill>/scripts/fde.py init <project> --profile standard --goal "user's goal"`. Choose `competition` only for a constrained contest/practice. Read [profiles](references/profiles.md) for that environment. Initialization is local, with no account connection or external download.
+
+Default installation includes the workflow and record CLI. Optional recipe code and runnable examples stay in the full kit repository. If they fit the task, use them there or run that repository's `fde.py init <project> --full` to add them. See [installation semantics](references/cli.md); never replace a customized installation automatically.
 
 ## Select one module
 
