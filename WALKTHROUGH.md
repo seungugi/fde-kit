@@ -4,7 +4,7 @@
 
 ```mermaid
 flowchart LR
-    A[문제와 성공 기준 합의] --> B[입력·규칙 확인]
+    A[과제 README·입력 분석] --> B[필수 동작·검사와 미확인 규칙 정리]
     B --> C[table: 정제·집계]
     C --> D[decide: 판정·우선순위]
     D --> E[search: 문서 근거]
@@ -22,13 +22,13 @@ flowchart LR
 python demo_recipes.py ./fde-practice-recipes
 ```
 
-이 명령은 Codex나 외부 모델을 호출하지 않는다. 새 폴더에 예제·스킬·도구를 설치하고 실제 산출물·검증 로그·handoff를 만든다. 이미 있는 폴더는 보존한다. Windows는 사용 가능한 python/py, Linux는 보통 python3를 쓴다.
+이 명령은 Codex나 외부 모델을 호출하지 않는다. `init --full`로 새 폴더에 예제·스킬·도구를 설치하고 실제 산출물·검증 로그·handoff를 만든다. 이미 있는 폴더는 보존한다. Windows는 사용 가능한 python/py, Linux는 보통 python3를 쓴다.
 
 실제 과제에서는 원래 과제 폴더에서 `fde.py init . --profile competition`으로 설치한 뒤 제공 Codex에 다음처럼 말한다. 이미 Codex 안에 있다면 다시 `launch`를 중첩 실행하지 않는다.
 
-> $fde-kit. 먼저 문제를 정의하자. 이 파일을 누가 어떤 판단에 쓰는지, 어떤 출력이면 성공인지, 빠진 업무 조건이 무엇인지 정리해줘. 아직 코드는 만들지 마.
+> $fde-kit. 실제 과제 README·제출 안내와 입력부터 분석해서 필수 동작, 입출력 조건, 확인 방법을 연결해줘. 자료에 없는 운영 판단 중 가장 중요한 질문 하나를 골라줘. 아직 코드는 만들지 마.
 
-Codex가 확인할 내용은 단순한 화면 종류가 아니라 사용자의 실제 결정이다. 예를 들어 “담당자가 오늘 처리할 순서를 정한다”, “팀별 비용 합계와 제외 내역이 필요하다”, “연락이나 시스템 상태 변경은 이번 범위에 없다”를 BRIEF에 남긴다.
+Codex는 문서에 있는 조건을 반복해서 묻지 않는다. 예를 들어 원문이 “팀별 비용 합계와 제외 내역”을 요구하면 해당 위치·입력 열·결과 형식·기대 합계를 기존 문서나 BRIEF에 연결한다. 담당자에게는 자료만으로 알 수 없는 실제 결정과 실패를 묻는다. “담당자가 오늘 처리할 순서를 정한다”, “특정 시점에 요청이 쌓여 긴급 건이 누락된다” 같은 답이 나오면 처리 규칙과 검증 사례에 어떤 영향을 주는지 확인한다. 이는 합성 예시이며 모든 과제의 요구가 아니다.
 
 아직 모르는 것은 가정으로 표시한다. 예를 들어 high의 의미, 24시간 경계 포함 여부, 금액 미입력 처리, 중복 ID 처리, 같은 등급의 정렬 기준을 실제 자료나 담당자 답으로 확인한다. 키트의 예시 값을 공식 조건으로 바꾸어 쓰지 않는다.
 
@@ -45,6 +45,8 @@ Codex가 확인할 내용은 단순한 화면 종류가 아니라 사용자의 �
 | T3 근거 발췌 | 관련 조항의 실제 파일·줄·해시와 발췌가 일치 | search |
 
 데모는 T1→T2→T3 순서로 의존성을 두었다. 실제로 독립인 작업은 과제와 제공 환경에 맞게 분리할 수 있다. 스킬이 외부 에이전트나 별도 모델을 자동 설치하지는 않는다.
+
+단순한 과제는 작업 하나로도 충분하다. 기본 설치에는 실행 묶음이 없으므로 이 예제를 실제로 쓸 때만 같은 버전의 전체 저장소에서 `fde.py init <과제 폴더> --full`로 추가한다. 먼저 필수 결과를 연결하고, 이후에 확인된 병목을 개선한다. 필수 규칙이나 검증은 나중 단계로 미루지 않는다.
 
 ## 3. 데이터→보고서
 
@@ -89,12 +91,12 @@ python .agents/skills/fde-kit/scripts/recipes.py search docs --query "긴급 요
 
 실행 도구는 계산하고, 검증기는 원문 요구에서 정한 기대값과 실제 산출물을 비교한다. 데모의 check_delivery.py는 실행 모듈을 가져다 쓰지 않고 알려진 합계·순서·실제 인용 위치를 검사한다. 입력·구현·문서 목록이 생성 당시와 같은지도 확인한다.
 
-작업별로 `ready` 후 다음처럼 기록한다.
+단일 담당 작업은 산출물을 만든 뒤 다음처럼 검증과 handoff를 함께 기록한다. 별도 `start`·`ready`는 필요하지 않다.
 
 ```bash
-python .agents/skills/fde-kit/scripts/fde.py verify . T1 -- python check_delivery.py table
-python .agents/skills/fde-kit/scripts/fde.py verify . T2 -- python check_delivery.py decide
-python .agents/skills/fde-kit/scripts/fde.py verify . T3 -- python check_delivery.py search
+python .agents/skills/fde-kit/scripts/fde.py verify --handoff . T1 -- python check_delivery.py table
+python .agents/skills/fde-kit/scripts/fde.py verify --handoff . T2 -- python check_delivery.py decide
+python .agents/skills/fde-kit/scripts/fde.py verify --handoff . T3 -- python check_delivery.py search
 ```
 
 실제 과제에서는 예제 검증기의 고정 기대값을 해당 요구의 독립 기대값으로 바꿔야 한다. 예제를 통과했다는 사실을 다른 도메인 전체의 정확성으로 확대하지 않는다.
@@ -105,7 +107,7 @@ python .agents/skills/fde-kit/scripts/fde.py verify . T3 -- python check_deliver
 
 > 여기까지 기록해줘. 다음 세션이 현재 출력 경로, 검증한 항목, 확인 필요 3건과 다음 행동을 바로 알 수 있게 해줘.
 
-Codex가 BRIEF·DECISIONS를 필요한 만큼 갱신하고 status를 확인한 뒤 handoff를 만든다.
+Codex가 현재 status와 기존 handoff를 확인한다. `verify --handoff` 뒤 상태가 그대로면 중복 생성할 필요가 없다. 진행 메모는 DECISIONS에 두고 요구가 바뀔 때만 BRIEF를 수정한다. 상태나 메모가 달라졌다면 다음으로 handoff를 갱신한다.
 
 ```bash
 python .agents/skills/fde-kit/scripts/fde.py handoff .

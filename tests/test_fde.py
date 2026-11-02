@@ -73,6 +73,72 @@ class KitBehavior(unittest.TestCase):
         self.call('init', self.project, ok=2)
         self.assertEqual(skill.read_text(), 'custom skill')
 
+    def test_default_install_omits_optional_code_and_examples_but_can_launch(self):
+        self.init()
+        skill = self.project / '.agents/skills/fde-kit'
+        self.assertTrue((skill / 'scripts/fde.py').is_file())
+        self.assertTrue((skill / 'references/verify.md').is_file())
+        self.assertFalse((skill / 'scripts/recipes.py').exists())
+        self.assertFalse((skill / 'scripts/fde_recipes').exists())
+        self.assertFalse((skill / 'assets/recipes').exists())
+        self.assertFalse((skill / 'assets/verification-example').exists())
+        installed = skill / 'scripts/fde.py'
+        run = subprocess.run([sys.executable, str(installed), 'launch', str(self.project), '--print-prompt'],
+                             capture_output=True, text=True, encoding='utf-8', timeout=20)
+        self.assertEqual(run.returncode, 0, run.stderr)
+        self.assertIn('Check orders', run.stdout)
+
+    def test_full_install_is_additive_and_preserves_evidence_and_user_notes(self):
+        self.init()
+        self.add()
+        self.verify()
+        self.call('handoff', self.project)
+        notes = self.project / 'fde-notes/DECISIONS.md'
+        notes.write_text('User decision retained', encoding='utf-8')
+        before = {p.relative_to(self.project): p.read_bytes() for p in self.project.rglob('*') if p.is_file()}
+        self.call('init', self.project, '--full')
+        for path, data in before.items():
+            self.assertEqual((self.project / path).read_bytes(), data, str(path))
+        skill = self.project / '.agents/skills/fde-kit'
+        self.assertTrue((skill / 'scripts/recipes.py').is_file())
+        self.assertTrue((skill / 'assets/verification-example/check_result.py').is_file())
+        self.assertEqual(self.status(), 'verified')
+        full = {p.relative_to(self.project): p.read_bytes() for p in self.project.rglob('*') if p.is_file()}
+        self.call('init', self.project)
+        self.call('init', self.project, '--full')
+        self.assertEqual(full, {p.relative_to(self.project): p.read_bytes() for p in self.project.rglob('*') if p.is_file()})
+
+    def test_core_can_initialize_another_core_but_cannot_claim_full_assets(self):
+        self.init()
+        installed = self.project / '.agents/skills/fde-kit/scripts/fde.py'
+        other = Path(self.temp.name) / 'another project'
+        run = subprocess.run([sys.executable, str(installed), 'init', str(other)], capture_output=True, timeout=20)
+        self.assertEqual(run.returncode, 0, run.stderr)
+        self.assertTrue((other / '.agents/skills/fde-kit/SKILL.md').is_file())
+        self.assertFalse((other / '.agents/skills/fde-kit/scripts/recipes.py').exists())
+        before = (self.project / 'fde-notes/state.json').read_bytes()
+        run = subprocess.run([sys.executable, str(installed), 'init', str(self.project), '--full'],
+                             capture_output=True, text=True, encoding='utf-8', timeout=20)
+        self.assertEqual(run.returncode, 2, run.stderr)
+        self.assertIn('matching full kit repository', run.stderr)
+        self.assertEqual((self.project / 'fde-notes/state.json').read_bytes(), before)
+
+    def test_full_install_rejects_partial_custom_assets_without_overwriting(self):
+        self.init()
+        custom = self.project / '.agents/skills/fde-kit/scripts/recipes.py'
+        custom.write_text('# User code', encoding='utf-8')
+        self.call('init', self.project, '--full', ok=2)
+        self.assertEqual(custom.read_text(), '# User code')
+        self.assertFalse((custom.parent / 'fde_recipes').exists())
+        self.assertFalse((custom.parents[1] / 'assets/recipes').exists())
+
+    def test_full_install_checks_existing_goal_before_adding_files(self):
+        self.init()
+        before = (self.project / 'fde-notes/state.json').read_bytes()
+        self.call('init', self.project, '--full', '--goal', 'Unapproved different goal', ok=2)
+        self.assertEqual((self.project / 'fde-notes/state.json').read_bytes(), before)
+        self.assertFalse((self.project / '.agents/skills/fde-kit/scripts/recipes.py').exists())
+
     def test_launch_preview_is_read_only_and_uses_project_goal(self):
         self.init()
         state = self.project / 'fde-notes/state.json'
@@ -176,6 +242,7 @@ class KitBehavior(unittest.TestCase):
 
     def test_installed_negative_example_rejects_plausible_wrong_output(self):
         self.init()
+        self.call('init', self.project, '--full')
         example = self.project / '.agents/skills/fde-kit/assets/verification-example'
         checker = example / 'check_result.py'
         original = (example / 'result.json').read_bytes()

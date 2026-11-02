@@ -1,6 +1,21 @@
-# Validation — v0.4 / 2026-10-30
+# Validation — v0.5 / 2026-11-02
 
-## Current v0.4 checks
+## Current v0.5 checks
+
+Windows / Python 3.13, no added kit runtime dependencies:
+
+- `python -m unittest discover -s tests -q`: 81 passed, 1 skipped, 0 failed. Five new behavior tests cover core installation, additive full installation preserving every existing file and evidence, core-to-core installation and missing-full-assets rejection, preservation of custom optional code, and rejecting a changed goal before copying optional files. Existing failure, dependency, stale-evidence and recipe integration tests also passed.
+- `python -m unittest discover -s examples/request-priority -q`: 6 passed. Total distinct automated cases: **87 passed, 1 skipped, 0 failed**. The skipped test requires symlink creation unavailable on this host; the Windows junction test ran.
+- Same synthetic request-queue demo on v0.4 and v0.5: identical result bytes. Default installed skill files decreased from **35 to 19** (excluding Python caches); full installation still contains 35. AGENTS.md and generated task records are separate and unchanged in count. Both versions already use add → verify --handoff; this version does not further reduce the two bookkeeping calls.
+- The installed core CLI ran an actual acceptance checker, detected a changed delivered result, recorded the failed check in handoff, then recovered after restoring the result while preserving the failure log. Adding full assets afterward left existing records byte-for-byte unchanged.
+- The new CLI read verified v0.4 schema-1 evidence without changing the old records. Competition restrictions and rubric instructions remain byte-identical to v0.4.
+- Skill-creator `quick_validate.py` passed for the full and installed core skill. Local Markdown file links resolved: 44 in the final repository, 25 in the core skill. All 21 Python source files parsed using Python 3.10 grammar; this is not a Python 3.10 runtime test.
+
+The source-first workflow, interview stopping rules and mandatory-versus-optional implementation guidance were reviewed for consistency across SKILL, START, modules and prompts. No fresh-agent behavior trial or real contest task was run for this release. Fewer installed files do not demonstrate shorter development time, better problem definition, higher scores or 80% domain coverage. Native Linux and the contest server remain untested.
+
+The sections below are historical evidence, not additional v0.5 test runs.
+
+## Historical v0.4 checks — 2026-10-30
 
 Windows / Python 3.13, with no added runtime dependencies:
 
