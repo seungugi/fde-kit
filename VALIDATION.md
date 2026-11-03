@@ -1,6 +1,23 @@
-# Validation — v0.5.1 / 2026-11-03
+# Validation — v0.6 / 2026-11-03
 
-## Current v0.5.1 checks
+## Current v0.6 checks
+
+Windows / Python 3.12.14. This update adds an evidence-linked implementation specification, stakeholder-question routing and a synthetic discovery example. The CLI changes are its version and generated guidance; state schema, verification logic, recipe behavior and core/full installation semantics are unchanged. No runtime dependency was added.
+
+- `python -m unittest discover -s tests -q`: 82 cases, 80 passed and 2 skipped under restricted permissions. A focused rerun of the two path-protection cases passed the Windows junction case; symbolic-link creation remained unavailable. `python -m unittest discover -s examples/request-priority -q`: 6 passed. Combined distinct coverage: **87 passed, 1 skipped, 0 failed**. The skipped case is `test_symlink_document_cannot_escape_root`.
+- Skill-creator `quick_validate.py` passed. `git diff --check` passed. Python sources parsed using Python 3.10 grammar; this is not a Python 3.10 runtime test. Local Markdown file targets resolved. Competition and rubric reference contents remained unchanged.
+- `python examples/spec-discovery/facts.py` reproduced the synthetic sample: 8 observed rows, Monday–Thursday at 10:00 and 16:00, arrivals 82, per-row gaps `0,0,0,1,0,2,0,3`, total gap 6, three over-capacity rows, no blank cells or duplicate date/hour keys. Observed total arrivals minus total capacity is 2, which must not replace the per-period gap sum.
+- Fresh-agent v0.5.1 baseline already extracted all deliverables, calculated the right gaps, proposed alternatives and asked about real operating impact. This baseline was useful; no claim is made that the prior kit could not perform the task. Its specification used a general brief and separate proposals rather than the new required per-entry evidence/status/respondent structure.
+- A fresh agent using v0.6 read only the task README/CSV and relevant skill instructions. It produced BRIEF/DECISIONS with R1–R3 requirements and S1–S3 implementation entries, evidence and coverage limits, alternatives, question ownership and acceptance. It asked one neutral question about problems outside the provided sample. The facilitator answers were withheld until that question was returned.
+- The continuation received the synthetic stakeholder's Friday 14:00–17:00 crowding/abandonment report. It updated the same specification and source records, preserved the original calculation, did not invent Friday volumes or staffing, and offered a short notice versus a review checklist. It waited for the participant's choice and then recorded choice A despite having recommended B, together with the bounded wording/code delegation and excluded automation.
+- Review of that continuation found an overreach: the broad answer “reject missing input” had been expanded into rejecting a header-only CSV. Discover/Coach now distinguish missing fields, zero records and unobserved periods, and require a source, answer or explicit delegation for new rejection rules. A fresh focused trial with the revised guidance left the zero-row policy open, explained success-versus-error tradeoffs and asked exactly one question. The example facilitator includes the explicit follow-up answer instead of treating “missing” as sufficient confirmation.
+- An independent variation used a Wednesday-morning stakeholder report and a suggestion to omit the mandatory CSV. The response retained the CSV, exposed the README conflict, did not assume Friday crowding, and distinguished the observed Wednesday `gap=0` from unrecorded queue abandonment. It asked one follow-up about feasible operating actions without choosing the participant's response.
+
+These are bounded behavioral trials with synthetic material, not statistical proof of reliability, a real contest run or a measured score improvement. The agent maintains and reviews the specification; the CLI does not judge its semantic completeness, capture conversations or enforce the question process. Real contest material and private records are not included in the example. Native Linux and the actual contest environment remain untested.
+
+The sections below are historical evidence, not additional v0.6 runs.
+
+## Historical v0.5.1 checks — 2026-11-03
 
 Windows / Python 3.12.14, no added kit runtime dependencies. This update changes skill guidance, prompts and generated coaching/record text; the CLI state schema, verification logic, recipes, competition restrictions and rubric rules are retained.
 

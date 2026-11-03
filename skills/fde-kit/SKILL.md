@@ -17,7 +17,7 @@ At the start or resumption of competition work, read the [competition restrictio
 
 Read the original task and the project's existing instructions. If `fde-notes/state.json` exists, read `fde-notes/BRIEF.md` and `fde-notes/DECISIONS.md`, then run `python <this-skill>/scripts/fde.py status <project>`. Resume the pending question without re-asking settled decisions. Read HANDOFF.md if it exists, as a snapshot to reconcile with current files. New projects have no handoff yet; fill the brief rather than treating its absence as an error. An old “done” statement is not current verification.
 
-For an unfamiliar task, inspect the task README and supplied inputs before selecting stakeholder questions or an implementation. Use [Discover](references/discover.md) to connect mandatory behavior, input/output constraints and checks to their sources. Distinguish task requirements, stakeholder clarifications and your proposals. Missing task documents are a gap, not permission to invent them. Build the smallest working path covering mandatory behavior before optional optimization; hard constraints apply from the first version.
+For an unfamiliar task, inspect the actual README and supplied inputs, then use [Discover](references/discover.md) to draft an implementation specification in the existing BRIEF: requirements/deliverables → data evidence and coverage limits → implementation alternatives → question/answer source and status → acceptance. Show the draft before the first question. Distinguish task requirements, measured observations, stakeholder reports and participant choices. Ask the provided stakeholder about operating context the files cannot reveal; let the participant choose product tradeoffs. Missing task documents or answers are gaps, not permission to invent them. Build the smallest working path covering mandatory behavior before optional optimization; hard constraints apply from the first version.
 
 For a new project, initialize only when useful: `python <this-skill>/scripts/fde.py init <project> --profile standard --goal "user's goal"`. Choose `competition` only for a constrained contest/practice. Read [profiles](references/profiles.md) for that environment. Initialization is local, with no account connection or external download.
 
@@ -29,7 +29,7 @@ For a small, single-owner task, use the [short workflow](references/execute.md#s
 
 | Situation | Read | Exit evidence |
 |---|---|---|
-| Success, constraints or output details are unclear | [Discover](references/discover.md) | Checkable outcomes, confirmed details and explicit delegations for the next work unit |
+| README/data need interpretation or operating/output details are unclear | [Discover](references/discover.md) | Evidence-linked specification draft, alternatives and one next question; confirmed rules for the next work unit |
 | Several approaches or dependencies are possible | [Decide](references/decide.md) | One chosen approach with reason and excluded scope |
 | Work needs sequencing or independent owners | [Execute](references/execute.md) | Task contracts and working deliverables |
 | A task needs tabular reporting, rule-based prioritization or cited document retrieval | [Execution recipes](references/recipes.md) | Real outputs, provenance and separate acceptance checks |

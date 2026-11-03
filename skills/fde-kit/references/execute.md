@@ -10,6 +10,8 @@ Add a source file when it has a distinct responsibility or makes the actual beha
 
 Apply the [one-question loop](coach.md#one-decision-per-question) before encoding an unresolved output or behavior choice in code, content or a test expectation. Continue independent authorized work while waiting. An implementation request authorizes execution of settled requirements; it does not choose missing details. Make equivalent internal implementation decisions without repeatedly asking the user.
 
+Use the current specification entries as the work contract. Before implementing a unit, check that its mandatory requirements have sources, data implications are supported, stakeholder reports are distinguished from measurements, relevant questions are resolved or delegated, and acceptance matches the selected behavior. Reference its specification IDs in the task's acceptance text and watch the source documents. This review is the agent's responsibility; CLI `status` does not parse or certify the specification.
+
 ## Small single-owner work
 
 Use this path for one independently checkable deliverable owned by one agent. A short paragraph or a few bullets in BRIEF can cover the user/job, input→output, constraints and concrete expected cases. Reference existing requirements rather than copying them. Keep question/answer history, delegations and operational unknowns in DECISIONS; separate interview/plan/explanation documents are optional.
