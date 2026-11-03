@@ -1,6 +1,21 @@
-# Validation — v0.5 / 2026-11-02
+# Validation — v0.5.1 / 2026-11-03
 
-## Current v0.5 checks
+## Current v0.5.1 checks
+
+Windows / Python 3.12.14, no added kit runtime dependencies. This update changes skill guidance, prompts and generated coaching/record text; the CLI state schema, verification logic, recipes, competition restrictions and rubric rules are retained.
+
+- `python -m unittest discover -s tests -q`: 82 cases, 80 passed and 2 skipped under restricted permissions. A focused rerun of the two skipped path-protection cases outside that restriction passed the Windows junction case; symbolic-link creation remained unavailable. `python -m unittest discover -s examples/request-priority -q`: 6 passed. Combined distinct coverage: **87 passed, 1 skipped, 0 failed**. The skipped case is `test_symlink_document_cannot_escape_root`.
+- Existing tests exercise repeat initialization, preservation of user notes and customized skills, core/full installation, launch, handoff, evidence freshness and all three recipes. No wording-matching tests were added for this guidance change.
+- Skill-creator `quick_validate.py` passed. All 48 local Markdown file links resolved. Python sources parsed with Python 3.10 grammar; this is not execution on a Python 3.10 runtime. `git diff --check` passed. Competition and rubric reference contents matched v0.5.
+- Read-only fresh-agent trial against v0.5: with presentation time pressure and undefined completion styling, the agent chose a green badge and said it would implement it while asking about list behavior. This exposed the assumption the new guidance addresses.
+- After revision, the same scenario asked one concrete question about keeping completed items in the list, with alternatives and tradeoffs, and limited pending work to inspection. An intermediate trial had requested broad delegation under time pressure; the final guidance now directs the agent to ask the next concrete product question instead.
+- A separate fresh-agent resume trial reused the recorded list, label and placement decisions and asked only the unanswered color question. After an explicit color answer and bounded styling delegation, its continuation proceeded without asking about internal variables or requiring another execution approval.
+
+These are limited simulated response trials, not repeated statistical evaluation or a real project implementation. They do not prove every model will follow the skill or that scores will improve. The agent must maintain question/answer records; the CLI does not capture conversations or technically block unresolved choices. Native Linux and the actual contest environment remain untested.
+
+The sections below are historical evidence, not additional v0.5.1 runs.
+
+## Historical v0.5 checks — 2026-11-02
 
 Windows / Python 3.13, no added kit runtime dependencies:
 

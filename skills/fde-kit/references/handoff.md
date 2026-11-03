@@ -10,6 +10,8 @@ When the goal changes, run `intent --goal ... --reason ...` and update BRIEF con
 
 Generate HANDOFF only after status reflects current files. The CLI emits effective states, acceptance, ownership, paths, last command/log, attempts and the next dependency-ready task. Keep rationale, failed approaches and unresolved limitations in DECISIONS. Refer to their source; do not copy entire chat transcripts.
 
+Before ending a session, maintain the current pending question, unasked gaps, confirmed answers, superseded choices and explicit delegation scopes in DECISIONS using the [coaching record](coach.md#keep-answers-across-sessions). On resume, reuse valid answers and ask the next unresolved question one at a time. The CLI's next-task suggestion is a queue hint, not a user choice or permission to decide unanswered details. It does not parse the question log; the agent must reconcile it with BRIEF and current instructions.
+
 For execution recipes, record which input/schema/rule version and output run directory are current, how exclusions/review rows were handled, and what evidence was missing. A recipe's result or manifest does not replace the independent verification log. Reconcile the source-file inventory on resume; undeclared new documents are outside file-hash tracking.
 
 On resume, read the original task, BRIEF and DECISIONS, run status, then use HANDOFF. A file can remain labeled `verified` in stored state while its effective status is `needs_verification`; always use effective status. Check current artifacts instead of trusting the snapshot or another agent's completion claim.

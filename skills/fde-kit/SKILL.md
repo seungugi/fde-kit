@@ -9,13 +9,13 @@ Move an unfamiliar problem to an explainable, verified deliverable. Preserve the
 
 ## The human leads
 
-Use [user-led coaching](references/coach.md). The user chooses the direction, priorities and scope. Surface gaps, challenge weak assumptions with reasons and recommend a concrete next step. Perform the currently requested work fully, including checks; do not jump from a request for diagnosis or advice to implementing the whole project. Do not ask again for permission already given for that step.
+Use [user-led coaching](references/coach.md). The user chooses the direction, priorities and unresolved output details. Ask **one question at a time**, with viable options, tradeoffs and a recommendation; wait for the answer before choosing or implementing that detail. This includes wording, colors, layout, defaults and exceptional behavior. Internal implementation with no effect on the agreed result is delegated to the agent. Perform clearly specified, authorized work fully, including checks; do not jump from advice to implementation or repeat permission already given.
 
 At the start or resumption of competition work, read the [competition restrictions](references/profiles.md#competition-restrictions) before choosing tools or models, including the prohibition on Computer Use at every stage and the Astra restriction. Also read [rubric alignment](references/rubric.md). Use the actual supplied criteria. When none are available, report that gap and keep useful working criteria labeled as assumptions. Never invent official weights, hidden tests or predicted scores.
 
 ## First action
 
-Read the original task and the project's existing instructions. If `fde-notes/state.json` exists, read `fde-notes/BRIEF.md` and run `python <this-skill>/scripts/fde.py status <project>`. Read HANDOFF.md if it exists, as a snapshot to reconcile with current files. New projects have no handoff yet; fill the brief rather than treating its absence as an error. An old “done” statement is not current verification.
+Read the original task and the project's existing instructions. If `fde-notes/state.json` exists, read `fde-notes/BRIEF.md` and `fde-notes/DECISIONS.md`, then run `python <this-skill>/scripts/fde.py status <project>`. Resume the pending question without re-asking settled decisions. Read HANDOFF.md if it exists, as a snapshot to reconcile with current files. New projects have no handoff yet; fill the brief rather than treating its absence as an error. An old “done” statement is not current verification.
 
 For an unfamiliar task, inspect the task README and supplied inputs before selecting stakeholder questions or an implementation. Use [Discover](references/discover.md) to connect mandatory behavior, input/output constraints and checks to their sources. Distinguish task requirements, stakeholder clarifications and your proposals. Missing task documents are a gap, not permission to invent them. Build the smallest working path covering mandatory behavior before optional optimization; hard constraints apply from the first version.
 
@@ -29,7 +29,7 @@ For a small, single-owner task, use the [short workflow](references/execute.md#s
 
 | Situation | Read | Exit evidence |
 |---|---|---|
-| Success or constraints are unclear | [Discover](references/discover.md) | A short brief with checkable outcomes and labeled assumptions |
+| Success, constraints or output details are unclear | [Discover](references/discover.md) | Checkable outcomes, confirmed details and explicit delegations for the next work unit |
 | Several approaches or dependencies are possible | [Decide](references/decide.md) | One chosen approach with reason and excluded scope |
 | Work needs sequencing or independent owners | [Execute](references/execute.md) | Task contracts and working deliverables |
 | A task needs tabular reporting, rule-based prioritization or cited document retrieval | [Execution recipes](references/recipes.md) | Real outputs, provenance and separate acceptance checks |
@@ -40,7 +40,7 @@ For a small, single-owner task, use the [short workflow](references/execute.md#s
 ## Operating rules
 
 - Original requirements and newer user decisions govern. Label your own assumptions; never turn an example into a universal requirement.
-- Clarify only decisions that materially change correctness, scope or irreversible actions. Continue independent authorized work. Do not insert routine approval stops.
+- Resolve every unsettled choice affecting the requested result or behavior through the coaching question loop. Facts found in project sources and earlier answers need no new question. Continue independent authorized work; pending answers, time pressure and recommendations are not approval.
 - Keep one authoritative brief and task list. Reuse existing task documents where required; avoid maintaining competing plans in several frameworks.
 - Keep BRIEF for current requirements and constraints. Put progress, unchanged-requirement explanations and operational unknowns in DECISIONS; do not rewrite BRIEF just to report progress. A real requirement change still invalidates earlier evidence.
 - Map relevant work to registered criteria and use `coverage` to identify missing evidence. Coverage is not a grade. The user decides whether to accept a suggested priority change.

@@ -1,6 +1,6 @@
 interface:
   display_name: "FDE Kit"
-  short_description: "Frame, deliver, verify and resume field work"
-  default_prompt: "Use $fde-kit to move this project from its current state to a verified, explainable deliverable."
+  short_description: "Clarify details, compare options and verify work"
+  default_prompt: "Use $fde-kit to ask one question at a time about unresolved output details, explain alternatives, preserve my decisions and complete the authorized work."
 policy:
   allow_implicit_invocation: true

@@ -8,9 +8,11 @@ Start from the required input→processing→usable result path in the existing 
 
 Add a source file when it has a distinct responsibility or makes the actual behavior easier to test or maintain. Do not pre-create empty modules, future extension layers or parallel plans. Do not collapse necessary separation into a monolith to meet a file-count target. Reuse prescribed README/PRD and existing records. CLI state, evidence and handoff are generated records, not extra documents the user must author.
 
+Apply the [one-question loop](coach.md#one-decision-per-question) before encoding an unresolved output or behavior choice in code, content or a test expectation. Continue independent authorized work while waiting. An implementation request authorizes execution of settled requirements; it does not choose missing details. Make equivalent internal implementation decisions without repeatedly asking the user.
+
 ## Small single-owner work
 
-Use this path for one independently checkable deliverable owned by one agent. A short paragraph or a few bullets in BRIEF can cover the user/job, input→output, constraints and concrete expected cases. Reference existing requirements rather than copying them. Put only consequential choices or operational unknowns in DECISIONS; separate interview/plan/explanation documents are optional.
+Use this path for one independently checkable deliverable owned by one agent. A short paragraph or a few bullets in BRIEF can cover the user/job, input→output, constraints and concrete expected cases. Reference existing requirements rather than copying them. Keep question/answer history, delegations and operational unknowns in DECISIONS; separate interview/plan/explanation documents are optional.
 
 Register the task before implementation. Declare relevant source/input, checker and delivered output files; future output files can be registered before they exist. When BRIEF references requirements in another file, watch that file too. Group files into one task when they share one acceptance check, not one task per file. After producing the output, run the real check once through the CLI:
 
