@@ -54,7 +54,25 @@ For example, if a stakeholder reports Friday crowding absent from the sample, ke
 
 Use the smallest informative example. For numeric or ordering work, calculate at least one expected result directly from the requirement before asking a model to implement it. For qualitative output, define inspectable criteria and the person or evidence that can judge them; do not invent a numeric score.
 
-Choose the next question by dependency and impact on mandatory work. Carry the specification IDs and answer provenance into execution and handoff. Before beginning a work unit, check that its requirements are covered, output choices are resolved or delegated, and tests reflect those choices. This is an agent review, not a new CLI guarantee.
+Choose the next question by dependency and impact on mandatory work. Present its evidence/gap, intended respondent and the concrete plan entries that different answers would change. Resolve business goals, constraints and missing inputs before dependent presentation choices. Keep other gaps visible without turning them into simultaneous questions. Carry specification IDs and answer provenance into execution and handoff.
 
-**Exit:** The next work unit's mandatory behavior, output details and checks are specified by sources, confirmed or explicitly delegated. Begin authorized work on that unit; unrelated pending decisions need not block it. Later clarification may change priorities or invalidate earlier evidence.
-**Fallback:** After the chosen framing time budget (suggested 10–15 minutes in a 180-minute contest), identify the highest-impact uncertainty and one experiment or question that resolves it. Continue work independent of that uncertainty.
+## Close the interview with a complete implementation plan
+
+When asked to define or plan the service, maintain an end-to-end plan in the same BRIEF from the initial draft onward. After each answer, show the changed rule and its effects on scope, data, user flow, processing and acceptance; leave unaffected entries intact. A list of answered questions or a ready first work unit is not the final plan for the whole requested service.
+
+At interview completion, consolidate the confirmed entries into a plan another implementer can use without replaying the conversation:
+
+- User/job, success criteria, mandatory scope and explicit exclusions, linked to requirement IDs.
+- Complete user flow from input to usable result, including the required exception/failure paths and who makes each operating decision.
+- Input/output contracts, needed entities and relationships, missing-data rules and evidence limits. Identify additional data needs instead of inventing values.
+- Core calculation/selection rules, objective and hard constraints where relevant, and the selected approach with its reason. Keep a mandatory optimizer in the initial working version.
+- Required screens or reports, interfaces and persistence, connected to the flow. Include these only when the task needs them; a report-only task does not acquire a web app or database.
+- Implementation order and dependencies: smallest complete required path, remaining mandatory work, integration/validation, then optional improvements. Name meaningful work units, not speculative files or modules.
+- Acceptance examples for normal, boundary and failure cases, with expected outcomes from sources/answers, plus remaining assumptions and operating limits.
+
+Review coverage in both directions: every mandatory requirement must have a place in the flow, implementation and acceptance; every proposed feature must have a requirement, participant choice or bounded delegation behind it. Check cross-entry consistency (for example, required outputs must be computable from available inputs, and selection rules must preserve capacity constraints). Reference existing specification IDs rather than copying the same plan into another document.
+
+Report whether the **whole requested plan is ready**. Ready means required behaviors and relevant output choices are specified, confirmed or delegated and the linked acceptance is concrete. If an unresolved business rule, source conflict or unavailable input changes a required part, label the plan incomplete, name the blocked part and ask the next question. Do not equate a time limit, an unanswered question or a recommendation with a decision. Result-neutral internal implementation needs no new question; reuse explicit delegation and settled answers.
+
+**Exit:** For framing/planning requests, deliver the consolidated plan and its readiness/remaining gaps, then stop without implementing the product. For an implementation already requested, a ready independent work unit may proceed while unrelated gaps remain; do not call the entire plan complete on that basis. Plan readiness is an agent review, not a CLI verification state or a claim that the service works. Later evidence can reopen an affected decision.
+**Fallback:** After the chosen framing time budget (suggested 10–15 minutes in a 180-minute contest), identify the highest-impact uncertainty and one experiment or question that resolves it. Preserve a provisional whole-service plan and continue only independent work already authorized.
