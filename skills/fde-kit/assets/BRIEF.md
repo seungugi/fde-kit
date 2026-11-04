@@ -26,4 +26,10 @@ Use one compact block per requirement/decision, or an equivalent table in the pr
 
 Identify the next single question and its linked specification IDs. Other unresolved items may remain listed but unasked. Use neutral fact questions for the stakeholder and alternatives with tradeoffs for participant choices. Record the actual answer/history in DECISIONS and update affected requirements here. Result-neutral internal implementation is delegated by default.
 
-For a small task, these connections can be a few completed bullets. Reuse this document instead of adding separate interview, analysis or plan files. Before implementation, check that the next work unit's mandatory requirements and relevant details are specified, confirmed or delegated and that acceptance matches them.
+## Whole-service plan and readiness
+
+Consolidate the current specification IDs here as the interview progresses: goal/success and scope; complete user flow and exceptions; input/output data and relationships; core rules/objective/constraints; required screens/reports, interfaces and persistence; implementation order/dependencies; normal/boundary/failure acceptance; remaining assumptions and limits. Omit components the task does not need, and reference earlier entries instead of repeating them.
+
+Check that every mandatory requirement has an implementation and acceptance, each feature has a source/choice/delegation, and the entries are mutually consistent. State whether the whole requested plan is ready or which unresolved decision blocks which part. A ready first work unit does not make the whole plan ready. Plan readiness is not CLI verification. If asked only for planning, deliver this plan without implementing the product.
+
+For a small task, these connections can be a few completed bullets. Reuse this document instead of adding separate interview, analysis or plan files. Before authorized implementation, check that the relevant details are specified, confirmed or delegated and that acceptance matches them.

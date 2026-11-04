@@ -16,6 +16,8 @@ The full package contains the runnable sample at `assets/recipes/service-ops/REA
 
 Exit 0 means generation completed, including `no_evidence` from a valid search or a queue requiring review. It does **not** mean accepted business outcomes. Exit 2 means invalid input/configuration, unsupported data, resource limit or output conflict. Read `result.json.status`, counts and review flags. Existing output directories are preserved: choose a new run directory and update the checker/task contract to those artifacts. A directory without manifest.json is incomplete. A complete manifest records hashes, not semantic correctness or protection against a hostile local writer.
 
+An explanation or follow-up request does not by itself require another run. Reuse current results if their relevant inputs, rules and evidence remain valid. Exploratory runs can live in an agent-owned temporary directory; retain the final run and any registered evidence. Follow the [temporary-work boundary](execute.md#file-reuse-and-temporary-work) when cleaning exploratory outputs. Never overwrite a prior run, discard its manifest or delete referenced artifacts to make the folder smaller.
+
 Installed skills are snapshots. `init` refuses to overwrite differing old copies. To upgrade, review and deliberately replace only the installed skill, or start a new project; preserve fde-notes and user data.
 
 ## Shared data contract

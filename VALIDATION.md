@@ -1,6 +1,29 @@
-# Validation — v0.6 / 2026-11-03
+# Validation — v0.6.1 / 2026-11-04
 
-## Current v0.6 checks
+## Current v0.6.1 checks
+
+Windows / Python 3.13.5. Based on main `0df1d1789585f2ddab2e19f139e6b3c0f1440f62`, this change extends the existing specification flow to a complete requested-service plan at interview completion. One BRIEF, existing task/verification/handoff commands, core/full installation and the participant's decision authority are retained. The CLI source differs only in its version string; no dependency or state schema is added.
+
+- `python -X utf8 -m unittest discover -s tests -q`: 82 cases, 81 passed, 1 host-limited case skipped, 0 failed. `python -X utf8 -m unittest discover -s examples/request-priority -q`: 6 passed. Combined: **87 passed, 1 skipped, 0 failed**. These checks exercise existing program behavior, not the semantic completeness of an interview.
+- Skill-creator `quick_validate.py` passed. All 63 pinned source paths were retained; local Markdown file links resolved; Python source parsed with Python 3.10 grammar (not execution on a Python 3.10 runtime). Competition/rubric references are byte-identical to the v0.6 base. The synthetic discovery example's independent observations remained 8 rows and total gap 6.
+- A fresh agent planned a fully specified department-cost CSV report. It connected all seven requirement groups to input validation, exact aggregation, output/error handling, implementation order and acceptance. It derived A=0.30, B=30.00, C=0.00, asked no unnecessary stakeholder question, added no web/database and created no product code or result CSV.
+- A separate fresh agent read a local meeting-room service README and shuffled data. It drafted the whole service and identified missing processing order, room choice and interval-boundary rules. Only then did the facilitator supply fixed stakeholder rules and the participant's confirmation/delegation. Its continuation linked all ten requirement groups to implementation and normal/boundary/failure checks, retained web upload/filter/full download and restart persistence, and derived four assigned/two unassigned requests. It did not turn a Wednesday crowding report into new alerts, priority or forecasting, and stopped at a plan without implementing the app.
+- The room trial's initial question mixed a recommendation into a request for an existing operating rule. The entrypoint and launch guidance now explicitly reserve options/recommendations for participant design choices and require neutral stakeholder fact questions. This observed failure is retained rather than presenting the first trial as wholly compliant.
+- A fresh first-question probe using the revised entrypoint received only the original room README/data and planning request, without the earlier answers or findings. It drafted the full flow, left the unresolved rules and whole-plan readiness pending, and asked neutrally what request processing order should apply, without invented choices or a recommendation. This is one post-change observation, not a guarantee of future compliance.
+
+These are bounded synthetic planning trials reviewed by the implementing agent, not a repeated version comparison, an independent audit certification, implemented-service tests or proof of real-contest performance. They do not establish reduced writing time or any domain-coverage percentage. The CLI does not assess plan readiness or enforce the interview. Native Linux and the actual contest environment remain untested.
+
+### File reuse follow-up — same v0.6.1 draft, 2026-11-04
+
+The follow-up updates existing guidance and prompts only: reuse implementation/tests/records across requests, answer explanation/review requests in the conversation, and keep disposable work in a managed temporary directory with bounded cleanup. Required files and registered evidence remain protected. Recipe output conflicts still require a new run; guidance avoids unnecessary runs and confines exploration to temporary work. No automatic pruning or runtime cleanup command was added.
+
+- Eight existing `tests/test_fde.py` cases passed: default core installation/launch, read-only launch preview, short verification/handoff, failed retry replacing the green handoff, progress versus requirements, changed evidence detection, handoff/user-note preservation, and repeat initialization preserving user files. These are the checks newly run for this follow-up; the 87-case result above belongs to the earlier v0.6.1 validation.
+- Skill structure and local links passed. Source inventory remains 63 paths, including 35 full-skill files; core installation remains 19. CLI, recipe implementations, test code, competition restrictions and rubric contents were not changed by this follow-up. No new project document or helper file is required by the guidance.
+- The implementing agent reviewed the rules against feature follow-ups, explanation-only requests, disposable negative-test fixtures and immutable recipe runs. The rules distinguish needed regression tests from one-off probes and preserve input/user files, state, manifests, failure logs and referenced artifacts. This is a consistency review, not a fresh-agent measurement of file growth or cleanup reliability.
+
+The sections below are historical evidence, not additional v0.6.1 runs.
+
+## Historical v0.6 checks — 2026-11-03
 
 Windows / Python 3.12.14. This update adds an evidence-linked implementation specification, stakeholder-question routing and a synthetic discovery example. The CLI changes are its version and generated guidance; state schema, verification logic, recipe behavior and core/full installation semantics are unchanged. No runtime dependency was added.
 

@@ -9,7 +9,7 @@ Move an unfamiliar problem to an explainable, verified deliverable. Preserve the
 
 ## The human leads
 
-Use [user-led coaching](references/coach.md). The user chooses the direction, priorities and unresolved output details. Ask **one question at a time**, with viable options, tradeoffs and a recommendation; wait for the answer before choosing or implementing that detail. This includes wording, colors, layout, defaults and exceptional behavior. Internal implementation with no effect on the agreed result is delegated to the agent. Perform clearly specified, authorized work fully, including checks; do not jump from advice to implementation or repeat permission already given.
+Use [user-led coaching](references/coach.md). The user chooses the direction, priorities and unresolved output details. Ask **one question at a time**. For a participant's design choice, give viable options, tradeoffs and a recommendation; wait for the answer before choosing or implementing that detail. For an unknown operating fact or existing business rule, ask the stakeholder neutrally without supplying invented alternatives or a preferred answer. Output choices include wording, colors, layout, defaults and exceptional behavior. Internal implementation with no effect on the agreed result is delegated to the agent. Perform clearly specified, authorized work fully, including checks; do not jump from advice to implementation or repeat permission already given.
 
 At the start or resumption of competition work, read the [competition restrictions](references/profiles.md#competition-restrictions) before choosing tools or models, including the prohibition on Computer Use at every stage and the Astra restriction. Also read [rubric alignment](references/rubric.md). Use the actual supplied criteria. When none are available, report that gap and keep useful working criteria labeled as assumptions. Never invent official weights, hidden tests or predicted scores.
 
@@ -29,7 +29,7 @@ For a small, single-owner task, use the [short workflow](references/execute.md#s
 
 | Situation | Read | Exit evidence |
 |---|---|---|
-| README/data need interpretation or operating/output details are unclear | [Discover](references/discover.md) | Evidence-linked specification draft, alternatives and one next question; confirmed rules for the next work unit |
+| README/data need interpretation or operating/output details are unclear | [Discover](references/discover.md) | Evidence-linked draft and one next question; at interview completion, the whole requested implementation plan with coverage and readiness |
 | Several approaches or dependencies are possible | [Decide](references/decide.md) | One chosen approach with reason and excluded scope |
 | Work needs sequencing or independent owners | [Execute](references/execute.md) | Task contracts and working deliverables |
 | A task needs tabular reporting, rule-based prioritization or cited document retrieval | [Execution recipes](references/recipes.md) | Real outputs, provenance and separate acceptance checks |
@@ -41,7 +41,7 @@ For a small, single-owner task, use the [short workflow](references/execute.md#s
 
 - Original requirements and newer user decisions govern. Label your own assumptions; never turn an example into a universal requirement.
 - Resolve every unsettled choice affecting the requested result or behavior through the coaching question loop. Facts found in project sources and earlier answers need no new question. Continue independent authorized work; pending answers, time pressure and recommendations are not approval.
-- Keep one authoritative brief and task list. Reuse existing task documents where required; avoid maintaining competing plans in several frameworks.
+- Additional requests update existing implementation, tests and authoritative records by default. A new request or stage does not need a new file or folder. Use the [file reuse and temporary work rules](references/execute.md#file-reuse-and-temporary-work); give explanations in the conversation unless a durable document is required or requested.
 - Keep BRIEF for current requirements and constraints. Put progress, unchanged-requirement explanations and operational unknowns in DECISIONS; do not rewrite BRIEF just to report progress. A real requirement change still invalidates earlier evidence.
 - Map relevant work to registered criteria and use `coverage` to identify missing evidence. Coverage is not a grade. The user decides whether to accept a suggested priority change.
 - Separate `implemented` from `verified`. The CLI only establishes that a command passed against declared files. You must still assess whether the command tests the acceptance criteria and whether declared files cover relevant inputs, tests and outputs.
