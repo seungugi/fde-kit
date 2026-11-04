@@ -13,6 +13,14 @@ Windows / Python 3.13.5. Based on main `0df1d1789585f2ddab2e19f139e6b3c0f1440f62
 
 These are bounded synthetic planning trials reviewed by the implementing agent, not a repeated version comparison, an independent audit certification, implemented-service tests or proof of real-contest performance. They do not establish reduced writing time or any domain-coverage percentage. The CLI does not assess plan readiness or enforce the interview. Native Linux and the actual contest environment remain untested.
 
+### File reuse follow-up — same v0.6.1 draft, 2026-11-04
+
+The follow-up updates existing guidance and prompts only: reuse implementation/tests/records across requests, answer explanation/review requests in the conversation, and keep disposable work in a managed temporary directory with bounded cleanup. Required files and registered evidence remain protected. Recipe output conflicts still require a new run; guidance avoids unnecessary runs and confines exploration to temporary work. No automatic pruning or runtime cleanup command was added.
+
+- Eight existing `tests/test_fde.py` cases passed: default core installation/launch, read-only launch preview, short verification/handoff, failed retry replacing the green handoff, progress versus requirements, changed evidence detection, handoff/user-note preservation, and repeat initialization preserving user files. These are the checks newly run for this follow-up; the 87-case result above belongs to the earlier v0.6.1 validation.
+- Skill structure and local links passed. Source inventory remains 63 paths, including 35 full-skill files; core installation remains 19. CLI, recipe implementations, test code, competition restrictions and rubric contents were not changed by this follow-up. No new project document or helper file is required by the guidance.
+- The implementing agent reviewed the rules against feature follow-ups, explanation-only requests, disposable negative-test fixtures and immutable recipe runs. The rules distinguish needed regression tests from one-off probes and preserve input/user files, state, manifests, failure logs and referenced artifacts. This is a consistency review, not a fresh-agent measurement of file growth or cleanup reliability.
+
 The sections below are historical evidence, not additional v0.6.1 runs.
 
 ## Historical v0.6 checks — 2026-11-03

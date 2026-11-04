@@ -6,7 +6,7 @@
 
 Trace one real input through the transformation/decision/storage/output path. Name concrete files or components. Explain the consequential design choice, a plausible alternative, why it was not selected, what was checked and what would break under changed assumptions. Keep startup steps executable from the recipient's environment.
 
-Use the existing README or the delivery response for a small task. For recurring outputs, follow the operational note in [handoff](handoff.md): a generation command working on the developer's machine does not establish that the recipient can keep the result current.
+For an explanation/status/review request, answer in the conversation by default. Create a document only when requested or required by the deliverable; otherwise update existing editable usage documentation if needed, preserving the original task README. Do not add a new summary/report for each request. For recurring outputs, follow the operational note in [handoff](handoff.md): a generation command working on the developer's machine does not establish that the recipient can keep the result current.
 
 Do not ask the user to memorize model-authored prose. Before a competition submission, let them explain the flow and a boundary case in their own words. Correct misunderstandings while AI use is still permitted. Once the AI-prohibited written phase begins, do not answer, draft or rewrite those examination responses.
 
