@@ -199,8 +199,9 @@ def init(root, args):
                         '`python .agents/skills/fde-kit/scripts/fde.py status .` before relying on HANDOFF.md.\n'
                         'Read only the applicable module. Simple questions and small edits need no full process.\n'
                         'For README/data work, draft an evidence-linked specification in BRIEF before the next question; distinguish stakeholder facts from participant choices.\n'
-                        'The human leads: ask one question at a time about unresolved output or behavior details, with options and tradeoffs; wait for the answer.\n'
-                        'Reuse recorded answers. Result-neutral internal implementation is delegated; continue independent authorized work.\n'
+                        'The human leads: ask one consequential question at a time about unresolved business rules, constraints, required functions or risk; wait for the answer.\n'
+                        'Ordinary wording, colors, layout and equivalent internal implementation are delegated by default within explicit requirements and business meaning.\n'
+                        'Reuse recorded answers. Simple requests use only relevant context and proportionate checks; do not restart the full workflow.\n'
                         'Use official rubric sources; label assumptions and never invent weights or predicted scores.\n'
                         'Do not treat this kit as permission to contact people, publish, or use external services.\n'
                         '<!-- /fde-kit -->\n')

@@ -9,11 +9,17 @@ Move an unfamiliar problem to an explainable, verified deliverable. Preserve the
 
 ## The human leads
 
-Use [user-led coaching](references/coach.md). The user chooses the direction, priorities and unresolved output details. Ask **one question at a time**. For a participant's design choice, give viable options, tradeoffs and a recommendation; wait for the answer before choosing or implementing that detail. For an unknown operating fact or existing business rule, ask the stakeholder neutrally without supplying invented alternatives or a preferred answer. Output choices include wording, colors, layout, defaults and exceptional behavior. Internal implementation with no effect on the agreed result is delegated to the agent. Perform clearly specified, authorized work fully, including checks; do not jump from advice to implementation or repeat permission already given.
+Use [user-led coaching](references/coach.md). The user chooses goals, business rules, constraints, required functionality and consequential tradeoffs. Wording, colors, layout and equivalent internal implementation are delegated to the agent by default, within explicit requirements, existing design conventions, accessibility and business meaning. Ask only about unresolved decisions that materially change correctness, scope, user rights, risk or required behavior; ask **one consequential question at a time**. Give options and a recommendation for a participant's choice; ask the stakeholder neutrally about missing operating facts. Do not turn default presentation delegation into authority to change business semantics, validation, permissions or safety. Complete authorized work without repeated confirmation or expanding advice into implementation.
 
 At the start or resumption of competition work, read the [competition restrictions](references/profiles.md#competition-restrictions) before choosing tools or models, including the prohibition on Computer Use at every stage and the Astra restriction. Also read [rubric alignment](references/rubric.md). Use the actual supplied criteria. When none are available, report that gap and keep useful working criteria labeled as assumptions. Never invent official weights, hidden tests or predicted scores.
 
-## First action
+## Match the request before starting a workflow
+
+- Explanation, status question or minor advice: answer from current context and inspect only relevant evidence if needed. Do not initialize records, rebuild the plan, run status/verification or generate handoff merely because another message arrived. Check live status only when the answer depends on current verification state.
+- Small, clearly scoped edit: read affected files and applicable requirements, reuse the existing implementation/tests and run a proportionate check. Skip a new interview, whole-project analysis, task breakdown and full lifecycle. Update records only for a real requirement, consequential decision or tracked-file change. If it changes a registered task's files, preserve evidence invalidation and use its existing verification contract before claiming it verified.
+- New field task, substantial requirement change or resuming multi-step work: use the first-action and relevant module guidance below. Reopen only affected decisions when context and answers are still valid. Do not automatically reload every module or repeat a full repository scan.
+
+## First action for multi-step work
 
 Read the original task and the project's existing instructions. If `fde-notes/state.json` exists, read `fde-notes/BRIEF.md` and `fde-notes/DECISIONS.md`, then run `python <this-skill>/scripts/fde.py status <project>`. Resume the pending question without re-asking settled decisions. Read HANDOFF.md if it exists, as a snapshot to reconcile with current files. New projects have no handoff yet; fill the brief rather than treating its absence as an error. An old “done” statement is not current verification.
 
@@ -25,7 +31,7 @@ Default installation includes the workflow and record CLI. Optional recipe code 
 
 ## Select one module
 
-For a small, single-owner task, use the [short workflow](references/execute.md#small-single-owner-work): one concise brief, one task contract, then `verify --handoff`. Do not require separate interview, plan, delegation or explanation files; reuse the user's existing documents. Use the full lifecycle when coordinating owners or dependencies.
+For a small, single-owner deliverable needing tracked verification, use the [short workflow](references/execute.md#small-single-owner-work): one concise brief, one task contract, then `verify --handoff`. This is not required for every explanation or trivial edit; apply the routing above first. Do not require separate interview, plan, delegation or explanation files; reuse the user's existing documents. Use the full lifecycle when coordinating owners or dependencies.
 
 | Situation | Read | Exit evidence |
 |---|---|---|
@@ -40,7 +46,7 @@ For a small, single-owner task, use the [short workflow](references/execute.md#s
 ## Operating rules
 
 - Original requirements and newer user decisions govern. Label your own assumptions; never turn an example into a universal requirement.
-- Resolve every unsettled choice affecting the requested result or behavior through the coaching question loop. Facts found in project sources and earlier answers need no new question. Continue independent authorized work; pending answers, time pressure and recommendations are not approval.
+- Use the question loop for unresolved consequential choices. Apply default presentation/internal delegation without asking for it again; respect explicit user choices and boundaries. Facts found in sources and earlier answers need no new question. Continue independent authorized work; pending business decisions, time pressure and recommendations are not approval.
 - Additional requests update existing implementation, tests and authoritative records by default. A new request or stage does not need a new file or folder. Use the [file reuse and temporary work rules](references/execute.md#file-reuse-and-temporary-work); give explanations in the conversation unless a durable document is required or requested.
 - Keep BRIEF for current requirements and constraints. Put progress, unchanged-requirement explanations and operational unknowns in DECISIONS; do not rewrite BRIEF just to report progress. A real requirement change still invalidates earlier evidence.
 - Map relevant work to registered criteria and use `coverage` to identify missing evidence. Coverage is not a grade. The user decides whether to accept a suggested priority change.

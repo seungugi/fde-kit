@@ -6,7 +6,7 @@
 
 Inspect what already works. Prefer an existing project capability, then a standard/platform feature, then an installed dependency, then small new code. Add a new tool only if it solves a concrete requirement well enough to justify installation, integration and debugging time.
 
-For unresolved output or behavior choices, compare viable alternatives by benefit, cost, risk and fit, then use the [one-question loop](coach.md#one-decision-per-question). Mark the recommendation as advice; the user chooses or explicitly delegates. Do not pad the comparison with artificial options. Internal implementation preserving the agreed result is delegated; respect existing architectural conventions. Do not sacrifice required behavior or validation to shorten code. Identify a thin end-to-end result that can reveal integration risk early.
+For unresolved consequential business/output choices, compare viable alternatives by benefit, cost, risk and fit, then use the [one-question loop](coach.md#one-decision-per-question). Mark the recommendation as advice; the user chooses or explicitly delegates. Do not pad the comparison with artificial options. Ordinary wording, colors, layout and equivalent internal implementation are delegated by default; respect explicit constraints, accessibility and existing conventions. Do not sacrifice required behavior or validation to shorten code. Identify a thin end-to-end result that can reveal integration risk early.
 
 Tie each comparison to specification IDs and the evidence that makes it relevant. If an option depends on an unknown operational fact, identify the stakeholder question first and mark the option conditional. After a participant choice, update the rule, status, answer source and acceptance in BRIEF together. A reported busy period is context for this decision, not automatic authorization for alerts, staffing or a new deliverable.
 
@@ -14,6 +14,6 @@ Separate mandatory behavior and hard constraints from optional quality improveme
 
 **Exit:** The user has chosen or delegated the unresolved product choices, the approach meets mandatory conditions, excluded scope is visible, and the riskiest technical assumption has a cheap check.
 For a whole-service planning request, connect these choices to the user flow, data, required components, ordered work and acceptance using [Discover's plan closure](discover.md#close-the-interview-with-a-complete-implementation-plan). A chosen algorithm or ready first slice alone does not complete that request. Planning does not authorize product implementation.
-**Fallback:** If an approach fails, choose an equivalent internal implementation within delegated scope. If the alternative changes output, behavior or constraints, explain the tradeoff and ask one question before using it. Never silently reduce scope or redefine acceptance to make a test pass.
+**Fallback:** If an approach fails, choose an alternative within default presentation/internal or explicit delegation. If it changes business meaning, required behavior, constraints or risk, explain the tradeoff and ask one consequential question before using it. Never silently reduce scope or redefine acceptance to make a test pass.
 
 Ponytail may assist with reuse and minimal complete changes when installed. It is optional; do not load it or other repositories merely to repeat this decision.

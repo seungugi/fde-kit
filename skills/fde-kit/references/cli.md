@@ -4,9 +4,11 @@ Python 3.10+; no package installation. From the package use `python fde.py`. Aft
 
 Default `init` installs the workflow/record CLI without optional recipe code or runnable examples. To add these when needed, run `python <full-kit>/fde.py init <project> --full` from the matching full repository. A core-only installed CLI cannot provide missing assets. No network downloads occur. Core and full use identical state and verification semantics; these installation choices are independent of standard/competition profiles.
 
+New projects receive the current default-delegation guidance in the managed AGENTS block. Existing AGENTS content is preserved by `init`. During an explicitly requested upgrade, inspect that block for older instructions requiring every cosmetic choice to be asked; reconcile only conflicting kit guidance with the user's current preferences while preserving unrelated project instructions. Reinitialization alone does not migrate an old block.
+
 Execution recipes are separate: use the full package's `recipes.py`, or the installed `scripts/recipes.py` after `init --full`. See [recipe contracts and examples](recipes.md). They generate outputs; `fde.py verify` records a separate acceptance check.
 
-Small single-owner work: after `init` and a short brief, `add` the deliverable, implement it, then run `verify --handoff ./project T1 -- python check_report.py`. This skips optional `start`/`ready` records and refreshes handoff with the check result. Keep the full sequence below for coordinated work. Existing commands and schema-1 records remain supported.
+Small single-owner deliverables needing tracked verification: after `init` and a short brief, `add` the deliverable, implement it, then run `verify --handoff ./project T1 -- python check_report.py`. Ordinary explanations and trivial edits do not require initialization or this sequence; use SKILL's request routing. Existing registered-file changes still invalidate evidence and require relevant verification. Keep the full sequence below for coordinated work. Existing commands and schema-1 records remain supported.
 
 ```bash
 python fde.py init ./project --profile competition --goal "Prioritize support requests"
