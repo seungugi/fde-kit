@@ -24,7 +24,7 @@ Use one compact block per requirement/decision, or an equivalent table in the pr
 
 ## Next unresolved question
 
-Identify the next single question and its linked specification IDs. Other unresolved items may remain listed but unasked. Use neutral fact questions for the stakeholder and alternatives with tradeoffs for participant choices. Record the actual answer/history in DECISIONS and update affected requirements here. Result-neutral internal implementation is delegated by default.
+Identify the next consequential question and its linked specification IDs, if any. Other important gaps may remain listed but unasked. Use neutral fact questions for the stakeholder and alternatives with tradeoffs for participant choices. Record consequential answers/history in DECISIONS and update affected requirements here. Ordinary wording, colors, layout and equivalent internal implementation are delegated by default within explicit constraints; do not make each styling detail a pending question or log entry.
 
 ## Whole-service plan and readiness
 

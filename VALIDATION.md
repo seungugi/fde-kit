@@ -1,6 +1,16 @@
 # Validation — v0.6.1 / 2026-11-04
 
-## Current v0.6.1 checks
+## Default delegation and request routing — 2026-11-04
+
+This follow-up delegates ordinary wording, colors, layout and equivalent internal implementation by default, preserving explicit constraints, accessibility and business meaning. Questions are reserved for unresolved consequential business rules, constraints, required functions, permissions, input acceptance and risk. Simple explanations and scoped edits use relevant context and proportionate checks; tracked-file changes retain evidence invalidation. SKILL, coaching/discovery/execution guidance, templates, prompts, README and generated AGENTS guidance were reconciled.
+
+- Eight existing cases passed: repeat initialization/user-file preservation, core installation/launch, read-only launch preview, user-led state without invented rubric, short verification/handoff, failed retry, progress-versus-requirement changes, and changed evidence detection. These are the cases newly run for this follow-up, not eight additional distinct cases beyond earlier totals.
+- Skill structure, Python syntax and local Markdown links passed; file inventories remain unchanged. CLI executable logic matches the original baseline after excluding its version literal and generated AGENTS text; the runtime change is generated guidance, not task/evidence/schema semantics. Competition/rubric and recipe code remain unchanged.
+- Consistency review covered ordinary styling, a required warning disguised as a visual change, unknown allocation/validation rules, a simple explanation and a scoped tracked edit. No fresh-agent behavioral or elapsed-time trial was run; fewer questions or faster responses are intended behavior, not measured improvements.
+
+Earlier v0.6.1 checks below describe their respective snapshots. In particular, the original version-only CLI change predates the generated-guidance update above.
+
+## Initial v0.6.1 checks
 
 Windows / Python 3.13.5. Based on main `0df1d1789585f2ddab2e19f139e6b3c0f1440f62`, this change extends the existing specification flow to a complete requested-service plan at interview completion. One BRIEF, existing task/verification/handoff commands, core/full installation and the participant's decision authority are retained. The CLI source differs only in its version string; no dependency or state schema is added.
 
