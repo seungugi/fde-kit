@@ -32,7 +32,7 @@ For optimization results, independently recompute feasibility and the objective 
 
 A solver may stop at its own time limit with a valid incumbent that a separate checker can accept if the task permits that quality. This does not change the CLI rule: a timed-out/failed verification command is failed, never verified. Declare relevant model settings, input/transformation code, result and independent checker in the existing contract; retain the actual evidence without a new optimization report.
 
-**Exit:** Current evidence supports the acceptance conditions; important limits are stated. Run the necessary integration check after combining independently tested work.
+**Exit:** Current evidence supports the acceptance conditions; important limits are stated. Run the necessary integration check after combining independently tested work. When handing over a substantial result, continue to [Explain](explain.md) with those artifacts and logs; a new explanation is not a reason to rerun valid checks.
 **Fallback:** After two repetitions of the same failure without new evidence, stop blind retries and investigate the cause. Change the hypothesis, collect a missing observation or reduce optional scope. This is a recommended investigation trigger, not permission to abandon mandatory work.
 
 Timeout stops the directly launched verification process. Avoid commands that start background servers; child daemons are not a managed lifecycle in this kit. This kit does not enforce the environment's network restrictions.
