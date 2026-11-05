@@ -1,3 +1,0 @@
-{% extends 'base.html' %}
-{% block title %}요청 확인 · 온담{% endblock %}
-{% block content %}<section class="empty-state error-state"><span class="empty-state-icon">{{ icon('info', 29) }}</span><p class="eyebrow">LET'S TRY THAT AGAIN</p><h1>요청을 다시 확인해 주세요.</h1><p>{{ error|default('요청을 처리하지 못했습니다. 화면을 새로 연 뒤 다시 시도해 주세요.', true) }}</p><a class="button button-primary" href="/?month={{ month|default('2026-11') }}">이달의 식단으로 돌아가기 {{ icon('arrow', 17) }}</a></section>{% endblock %}

@@ -32,6 +32,9 @@ class WebScaffold(unittest.TestCase):
         state = json.loads((self.target/'fde-notes/state.json').read_text(encoding='utf-8'))
         self.assertEqual(state['profile'], 'standard')
         self.assertFalse(list(self.target.rglob('*.sqlite3')))
+        self.assertTrue((self.target/'app/security.py').is_file())
+        manifest=json.loads((self.target/'scaffold.json').read_text(encoding='utf-8'))
+        self.assertNotIn('example',manifest)
 
     def test_existing_target_never_overwritten_even_if_empty(self):
         self.target.mkdir()
@@ -43,15 +46,6 @@ class WebScaffold(unittest.TestCase):
         self.assertEqual(hashlib.sha256(marker.read_bytes()).hexdigest(),before)
         self.assertEqual(list(self.target.iterdir()),[marker])
 
-    def test_meal_overlay_is_explicit_and_retains_generic_infrastructure(self):
-        result=self.run_cli('init',self.target,'--example','meal-planner')
-        self.assertEqual(result.returncode,0,result.stderr+result.stdout)
-        self.assertTrue((self.target/'app/planner.py').is_file())
-        self.assertTrue((self.target/'templates/index.html').is_file())
-        self.assertTrue((self.target/'data/menus.json').is_file())
-        self.assertTrue((self.target/'app/security.py').is_file())
-        self.assertIn('meal-planner', (self.target/'scaffold.json').read_text(encoding='utf-8'))
-
     def test_core_only_install_explains_missing_optional_assets_without_writing_target(self):
         core=Path(self.temp.name)/'core'
         initialized=subprocess.run([sys.executable,str(ROOT/'fde.py'),'init',str(core)],capture_output=True,text=True)
@@ -61,8 +55,8 @@ class WebScaffold(unittest.TestCase):
         self.assertFalse(self.target.exists())
         self.assertIn('full', (result.stdout+result.stderr).lower())
 
-    def test_invalid_example_cannot_escape_asset_root(self):
-        result=self.run_cli('init',self.target,'--example','../../elsewhere')
+    def test_removed_overlay_option_is_rejected_without_creating_target(self):
+        result=self.run_cli('init',self.target,'--example','custom')
         self.assertNotEqual(result.returncode,0)
         self.assertFalse(self.target.exists())
 

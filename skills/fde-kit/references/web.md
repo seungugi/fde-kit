@@ -10,7 +10,6 @@ From the full kit repository:
 
 ```text
 python web.py init ./my-webapp
-python web.py init ./meal-practice --example meal-planner
 ```
 
 The destination must not exist. This copies local assets and installs the project-local FDE workflow; it does not install packages, start servers or deploy. Follow the generated README. In an existing project, adapt relevant starter files to the required layout without overwriting user work or original inputs. A generated README does not replace the original assignment.
@@ -21,7 +20,7 @@ Core installations include this guide and scripts/web.py but omit web assets. Us
 
 Keep HTTP handlers, business functions, persistence and templates separate. Retain pinned dependencies and local static assets; keep databases and secrets out of Git. The generic item board is a working example, not a required feature. Adapt it to the requested product and remove unrelated demo functionality.
 
-Confirm consequential rules: interest versus vote versus reservation, eligibility, duplicates, publication state, edit rights and conflicting updates. Do not infer attendance from preference counts. Meal population, budget, calendar and fryer constraints are synthetic fixture policies, never universal FDE rules.
+Confirm consequential rules from the task and user answers: eligibility, duplicate handling, state transitions, edit rights and conflicting updates. Demo behavior does not establish the target project's business rules.
 
 The user/role switch is a local demo capability gated by DEMO_MODE=1, not real authentication or SSO. Public use needs the environment's authorized identity integration. Without it, protected mutations stay disabled outside demo mode. Preserve server role checks, CSRF and validation when editing views.
 
@@ -33,4 +32,4 @@ TestClient success does not prove HTMX swaps or browser layout. In authorized lo
 
 `verified` records a declared check passing. Before delivery inspect actual required screens, outputs, failures and the final explanation. Record who reviewed (agent or human), how, and the evidence; an agent review is not human approval. Keep this in existing BRIEF/DECISIONS or the required report, not a fabricated score.
 
-Explain why the stack fits, trace one real input through code/storage/output, identify enforced rules, give runnable checks and limitations. The generated /about page and README are examples and must match actual behavior after adaptation.
+Explain why the stack fits, trace one real input through code/storage/output, identify enforced rules, give runnable checks and limitations. The generated README is an example and must match actual behavior after adaptation.
