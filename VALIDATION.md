@@ -1,4 +1,24 @@
-# Validation — v0.6.1 / 2026-11-04
+# Validation — v0.6.1 / 2026-11-05
+
+## 2026-11-05: batched questions and existing-task update
+
+The current local refinement adds `update` and aligns generated handoff/project guidance with batched consequential questions. Eight new CLI cases cover existing evidence and dependent-task invalidation, contract reversal, no-op/owner-only updates, installed-CLI list replacement/clearing, invalid input atomicity, writer/ownership guards, failed/interrupted checks and legacy schema-1 proofs. Existing regression, recipe and example suites remain the acceptance commands. The source and package consistency check now permits the intentional update/routing/contract changes while preserving the verification, path and lock engines.
+
+These are executable coverage descriptions, not a new independent-agent or speed benchmark. The release execution result is recorded in the invoking project's `fde-notes` evidence and DECISIONS; earlier counts below belong to the dated runs that produced them. Review of question guidance checks consistency across SKILL, Coach, Discover, startup/resume prompts and generated records; the CLI does not semantically enforce conversations.
+
+## General optimization framing and method selection — 2026-11-05
+
+This is a guidance-only follow-up in existing files. Optimization enters through SKILL/Discover and is specified in Decide, with the same BRIEF, task contract, Verify and Handoff. Existing C1/C3/C4 prompts include the conditional branch. No optimizer, dependency, CLI command, schema or required document is added; simple requests retain the light route. Source/release/installation checks retain 63 repository paths, 35 full skill paths and 19 core skill paths.
+
+Bounded independent forward checks used the revised skill and raw synthetic requests, without expected answers or implementation findings. Two fresh agent contexts were used, followed by one simple request in the second context; no files were created by those agents:
+
+- A planning-only resource-allocation request with three indivisible jobs, two capacity-limited resources, an eligibility restriction, missing durations and unspecified dual-objective priorities. The agent distinguished aggregate assignment capacity from time-dependent reusable capacity, treated the unique assignment and cost as conditional on their missing definitions, asked grouped consequential questions as requested, compared exhaustive enumeration with heavier methods and did not implement or install anything.
+- A result review required proving the minimum over 200 candidates, but supplied an unjustified 40-candidate restriction, FEASIBLE cost 23/bound 20 and a later UNKNOWN attempt. The agent kept the original task incomplete, scoped the bound to the restricted model, called for independent objective recalculation and restoration/justification of the omitted candidates, and preserved the previous result. It did not turn kit verification into an optimality certificate.
+- A subsequent wording-only request received just a replacement label, without a new model, question, file or lifecycle.
+
+Regression validation uses eight existing cases for repeat initialization, core installation, short verification/handoff, failed retry, timeout/mutation guards, requirements versus progress, changed evidence and direct-verification ownership/dependencies. Structural checks cover skill validity, local links, Python 3.10 grammar, source/release/ZIP/installed agreement and unchanged CLI executable logic, competition/rubric and recipe code. No wording-matching tests were added. Actual runtime checks use Windows/Python 3.13; syntax parsing is not a Python 3.10 runtime test.
+
+The forward checks assess planning/reporting behavior in a few cases, not solver correctness, convergence, runtime improvement, official performance or a general problem-coverage percentage. This kit supplies conditional guidance; it does not enforce the model or automatically provide a solving engine. Earlier validation sections below retain their historical scopes.
 
 ## Default delegation and request routing — 2026-11-04
 

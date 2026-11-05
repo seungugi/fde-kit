@@ -22,6 +22,8 @@ Use one compact block per requirement/decision, or an equivalent table in the pr
 - Status/question: specified / pending / confirmed / delegated; answer source or question ID, intended respondent (participant or stakeholder), blocked work and explicit delegation boundary.
 - Current rule and acceptance: confirmed behavior and concrete expected cases. Keep unresolved rules and their expectations pending; update both when the answer changes.
 
+If optimization is required, extend the relevant entries here using the skill's Decide guidance: decisions/domains; objective units and priority; hard constraints/boundaries; measured input scale and model transformations/limits; baseline and selected method/reason; stopping budget and independent acceptance. Keep unanswered business rules pending. Omit this content for unrelated work; do not create a second model or algorithm document. Current result, bounds and search progress belong in DECISIONS unless requirements changed.
+
 ## Next unresolved question
 
 Identify the next consequential question and its linked specification IDs, if any. Other important gaps may remain listed but unasked. Use neutral fact questions for the stakeholder and alternatives with tradeoffs for participant choices. Record consequential answers/history in DECISIONS and update affected requirements here. Ordinary wording, colors, layout and equivalent internal implementation are delegated by default within explicit constraints; do not make each styling detail a pending question or log entry.

@@ -174,6 +174,152 @@ class KitBehavior(unittest.TestCase):
         self.assertEqual(attempt['exit_code'], 0)
         self.assertTrue((self.project / attempt['log']).is_file())
 
+    def test_update_preserves_evidence_and_invalidates_dependents(self):
+        self.init()
+        self.add()
+        self.add('T2', ('T1',))
+        self.verify()
+        self.verify('T2')
+        before = self.state()
+        evidence = {p.name: p.read_bytes() for p in (self.project / 'fde-notes/evidence').iterdir()}
+        self.call('update', self.project, 'T1', '--acceptance', 'R1 plus new R2',
+                  '--reason', 'User supplied R2')
+        after = self.state()
+        self.assertEqual(set(after['tasks']), {'T1', 'T2'})
+        for name in ('T1', 'T2'):
+            self.assertEqual(after['tasks'][name]['attempts'], before['tasks'][name]['attempts'])
+            self.assertEqual(after['tasks'][name]['effective_status'], 'needs_verification')
+        self.assertEqual(evidence, {p.name: p.read_bytes() for p in (self.project / 'fde-notes/evidence').iterdir()})
+        self.assertEqual(after['tasks']['T1']['files'], ['T1.txt'])
+        event = after['history'][-1]
+        self.assertEqual((event['kind'], event['id'], event['reason']), ('task_update', 'T1', 'User supplied R2'))
+        self.assertEqual(event['previous']['acceptance'], before['tasks']['T1']['acceptance'])
+        self.assertEqual(event['current']['acceptance'], 'R1 plus new R2')
+        self.call('handoff', self.project)
+        text = (self.project / 'fde-notes/HANDOFF.md').read_text(encoding='utf-8')
+        self.assertIn('R1 plus new R2', text)
+        self.assertIn('needs_verification', text)
+        self.verify()
+        self.assertEqual(self.status(), 'verified')
+        self.assertEqual(self.status('T2'), 'needs_verification')
+        self.verify('T2')
+        self.assertEqual(self.status('T2'), 'verified')
+
+    def test_update_reverting_contract_cannot_revive_old_proof(self):
+        self.init()
+        self.add()
+        self.verify()
+        original = self.state()['tasks']['T1']['acceptance']
+        self.call('update', self.project, 'T1', '--acceptance', 'Changed', '--reason', 'New rule')
+        self.call('update', self.project, 'T1', '--acceptance', original, '--reason', 'Rule reverted')
+        self.assertEqual(self.status(), 'needs_verification')
+        task = self.state()['tasks']['T1']
+        self.assertEqual(task['contract_revision'], 2)
+        self.assertEqual(len(task['attempts']), 1)
+        self.verify()
+        self.assertEqual(self.state()['tasks']['T1']['attempts'][-1]['contract']['revision'], 2)
+        self.assertEqual(self.status(), 'verified')
+
+    def test_update_noop_and_owner_only_preserve_current_proof(self):
+        self.init()
+        self.add()
+        self.verify()
+        path = self.project / 'fde-notes/state.json'
+        before = path.read_bytes()
+        self.call('update', self.project, 'T1', '--title', 'Validate T1', '--files', 'T1.txt', 'T1.txt',
+                  '--reason', 'Same values')
+        self.assertEqual(path.read_bytes(), before)
+        self.assertEqual(self.status(), 'verified')
+        self.call('update', self.project, 'T1', '--owner', 'new-owner', '--reason', 'Ownership handoff')
+        task = self.state()['tasks']['T1']
+        self.assertEqual(task['owner'], 'new-owner')
+        self.assertNotIn('contract_revision', task)
+        self.assertEqual(self.status(), 'verified')
+
+    def test_update_uses_installed_cli_replaces_lists_and_allows_clearing(self):
+        self.init()
+        self.add()
+        self.add('T2')
+        self.call('criterion', self.project, 'R1', 'Example rule', '--basis', 'assumed', '--source', 'User request')
+        installed = self.project / '.agents/skills/fde-kit/scripts/fde.py'
+        result = subprocess.run([sys.executable, str(installed), 'update', str(self.project), 'T1',
+                                 '--title', 'Changed title', '--files', 'new.txt', 'new.txt',
+                                 '--depends', 'T2', '--criteria', 'R1', '--reason', 'New input and prerequisite'],
+                                capture_output=True, text=True, encoding='utf-8', timeout=20)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        task = self.state()['tasks']['T1']
+        self.assertEqual((task['title'], task['files'], task['depends'], task['criteria']),
+                         ('Changed title', ['new.txt'], ['T2'], ['R1']))
+        self.assertEqual(task['effective_status'], 'blocked')
+        self.call('update', self.project, 'T1', '--depends', '--criteria', '--reason', 'No prerequisites')
+        task = self.state()['tasks']['T1']
+        self.assertEqual((task['depends'], task['criteria'], task['files']), ([], [], ['new.txt']))
+        self.verify(ok=2)  # Missing future artifact is permitted in a contract, not in verification.
+        (self.project / 'new.txt').write_text('ready', encoding='utf-8')
+        self.verify(code="from pathlib import Path; assert Path('new.txt').read_text() == 'ready'")
+        self.assertEqual(self.status(), 'verified')
+
+    def test_update_invalid_changes_leave_state_and_history_untouched(self):
+        self.init()
+        self.add()
+        self.add('T2', ('T1',))
+        invalid = [[], ['--title', ' '], ['--acceptance', ''], ['--owner', ''],
+                   ['--files', '../outside'], ['--files', 'fde-notes/state.json'], ['--files', '.'],
+                   ['--files'], ['--depends', 'unknown'], ['--depends', 'T1'], ['--depends', 'T2'],
+                   ['--criteria', 'unregistered']]
+        path = self.project / 'fde-notes/state.json'
+        before = path.read_bytes()
+        for fields in invalid:
+            with self.subTest(fields=fields):
+                self.call('update', self.project, 'T1', *fields, '--reason', 'Invalid request', ok=2)
+                self.assertEqual(path.read_bytes(), before)
+        self.call('update', self.project, 'unknown', '--title', 'No task', '--reason', 'Missing', ok=2)
+        self.call('update', self.project, 'T1', '--title', 'Changed', '--reason', ' ', ok=2)
+        self.assertEqual(path.read_bytes(), before)
+
+    def test_update_respects_writer_lock_and_active_file_ownership(self):
+        self.init()
+        self.add()
+        self.add('T2')
+        self.call('start', self.project, 'T1')
+        self.call('start', self.project, 'T2')
+        state = self.project / 'fde-notes/state.json'
+        before = state.read_bytes()
+        self.call('update', self.project, 'T1', '--files', 'T2.txt', '--reason', 'Conflicting owner', ok=2)
+        self.assertEqual(state.read_bytes(), before)
+        lock = self.project / 'fde-notes/.lock'
+        lock.write_text('another writer', encoding='utf-8')
+        self.call('update', self.project, 'T1', '--acceptance', 'Changed', '--reason', 'Locked', ok=2)
+        self.assertEqual(state.read_bytes(), before)
+        self.assertEqual(lock.read_text(), 'another writer')
+
+    def test_update_does_not_promote_failed_or_interrupted_verification(self):
+        self.init()
+        self.add()
+        self.verify(code='raise SystemExit(1)', ok=1)
+        self.call('update', self.project, 'T1', '--acceptance', 'Changed', '--reason', 'New rule')
+        self.assertEqual(self.status(), 'failed')
+        path = self.project / 'fde-notes/state.json'
+        raw = json.loads(path.read_text(encoding='utf-8'))
+        raw['tasks']['T1']['status'] = 'verifying'  # Simulate an interrupted CLI, without its lock.
+        path.write_text(json.dumps(raw), encoding='utf-8')
+        before = path.read_bytes()
+        self.call('update', self.project, 'T1', '--title', 'Changed', '--reason', 'Interrupted', ok=2)
+        self.assertEqual(path.read_bytes(), before)
+
+    def test_legacy_schema_one_proof_stays_valid_until_contract_update(self):
+        self.init()
+        self.add()
+        self.verify()
+        path = self.project / 'fde-notes/state.json'
+        raw = json.loads(path.read_text(encoding='utf-8'))
+        del raw['tasks']['T1']['criteria']  # Earlier schema-1 task: optional field absent.
+        path.write_text(json.dumps(raw), encoding='utf-8')
+        self.assertEqual(self.status(), 'verified')
+        self.call('update', self.project, 'T1', '--acceptance', 'New rule', '--reason', 'Legacy task update')
+        self.assertEqual(self.status(), 'needs_verification')
+        self.assertEqual(len(self.state()['tasks']['T1']['attempts']), 1)
+
     def test_short_workflow_verifies_once_and_generates_handoff(self):
         self.init()
         self.add()

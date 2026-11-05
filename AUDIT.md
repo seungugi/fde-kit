@@ -1,5 +1,21 @@
 # FDE Kit 감사 기록
 
+## 2026-11-05: task-update and handoff review
+
+- The old generated handoff forced one question at a time despite project/user batch instructions. Current guidance collects answerable consequential questions in one batch, separates respondents/decisions, defers dependent follow-ups and skips settled/trivial questions. Existing user AGENTS text is preserved during installation; current instructions retain precedence.
+- Existing task changes previously required manual JSON edits. `update` validates a proposed contract under the existing writer lock before a single state save, retains attempts/logs, and records before/after values with a reason. It does not implement requirements or claim verification.
+- Comparing only final values would let A -> B -> A resurrect an old proof. A monotonic per-task contract revision prevents this; absent revisions preserve old schema-1 proofs. A same-value call is a no-op and owner-only metadata does not invalidate an otherwise current proof.
+- Boundary cases include self/indirect cycles, unknown IDs/criteria/dependencies, empty required values, escaping/record paths, active file ownership and interrupted verification. Existing evidence hashes, failure/timeout behavior and user-owned handoff protection remain intact. Tests exercise these invariants; this is an implementer review, not independent certification.
+
+## 범용 최적화 문제 정의·해법 선택 — 2026-11-05
+
+- **알고리즘 이름부터 고르고 업무 조건을 누락:** 기존 Decide에서 결정변수·목적/단위/우선순위·강제 제약·자료 규모와 모형 변환을 먼저 정한다. 미정 가중치·허용 오차를 발명하거나 필수 제약을 점수로 상쇄하지 않는다. 구조별 해법은 후보이며 실제 제약·환경·품질·구현 비용으로 선택한다.
+- **기준안·제한 탐색을 최적해로 과장:** 같은 조건의 유효 기준안과 개선 결과를 비교한다. 원본 입력으로 제약·목적값을 독립 계산하고, 유효/증명된 최적/증명된 불가능/미확정을 구분한다. 후보 축소·근사와 상하한의 범위를 공개하며 필수 최적성 증명이 없으면 미완료다.
+- **시간 초과가 기존 유효 해를 지우거나 검증을 통과시킴:** 확인된 유효 결과를 기존 경로에 보존하고 중단 사유를 기록한다. 탐색기 시간 제한과 kit 검증 명령의 실패는 별개이며 기존 실패·무효화 규칙은 유지한다.
+- **새 절차·문서로 요청 부담 증가:** 최적화가 필요한 요구에만 기존 BRIEF/DECISIONS와 관련 모듈을 확장한다. 새 필수 파일·명령·solver 의존성은 없다. 기존 프롬프트와 인계에서 모형·방법·근거·다음 행동을 연결한다. 자동 생성 snapshot의 일반 질문 문구보다 현재 사용자/프로젝트 지시가 우선함을 인계 지침에 명시한다.
+
+독립 문맥의 계획/결과 검토와 후속 단순 요청을 확인했다. 미정 용량·비용·우선순위의 조건부 처리, 제한 후보의 증명 범위, UNKNOWN 처리, 간단 요청의 경량 응답을 관측했다. 검사 범위와 기존8개 회귀검사·배포 일치 확인은 [VALIDATION.md](VALIDATION.md)에 기록한다. 모든 분야의 해결률이나 성능 향상, 모든 모델의 준수를 입증한 결과는 아니다.
+
 ## 기본 표현 위임·요청 크기별 진행 — 2026-11-04
 
 - **사소한 표현 질문으로 왕복 증가:** 문구·색상·배치와 동등한 내부 구현은 기본 위임한다. 사용자 선택·기존 디자인·접근성·업무 의미를 보존하며 각 색상/레이블의 승인·기록을 요구하지 않는다. 기존의 색상까지 별도 질문하는 예시와 새 프로젝트 AGENTS 문구도 교체했다.

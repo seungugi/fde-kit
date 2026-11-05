@@ -87,8 +87,12 @@ def file_snapshot(root, files, require=False):
 
 
 def contract(task):
-    return {**{key: task[key] for key in ('title', 'acceptance', 'files', 'depends')},
-            'criteria': task.get('criteria', [])}
+    result = {**{key: task[key] for key in ('title', 'acceptance', 'files', 'depends')},
+              'criteria': task.get('criteria', [])}
+    # Legacy schema-1 proofs have no task revision. Preserve them until a real edit.
+    if task.get('contract_revision', 0):
+        result['revision'] = task['contract_revision']
+    return result
 
 
 def rubric_snapshot(state, task):
@@ -199,7 +203,7 @@ def init(root, args):
                         '`python .agents/skills/fde-kit/scripts/fde.py status .` before relying on HANDOFF.md.\n'
                         'Read only the applicable module. Simple questions and small edits need no full process.\n'
                         'For README/data work, draft an evidence-linked specification in BRIEF before the next question; distinguish stakeholder facts from participant choices.\n'
-                        'The human leads: ask one consequential question at a time about unresolved business rules, constraints, required functions or risk; wait for the answer.\n'
+                        'The human leads: collect currently answerable consequential questions in one concise batch; follow the current user/project question policy and wait for needed answers.\n'
                         'Ordinary wording, colors, layout and equivalent internal implementation are delegated by default within explicit requirements and business meaning.\n'
                         'Reuse recorded answers. Simple requests use only relevant context and proportionate checks; do not restart the full workflow.\n'
                         'Use official rubric sources; label assumptions and never invent weights or predicted scores.\n'
@@ -213,7 +217,7 @@ def init(root, args):
                 'Record each decision with an ID and status: pending, confirmed, delegated or superseded.\n'
                 'Include the question kind/respondent, options/recommendation, actual answer and source/date, supplied rationale and affected specification IDs.\n'
                 'Separate stakeholder reports from measurements and participant choices. Update the selected rule and acceptance together in BRIEF.\n'
-                'Keep one question awaiting an answer; other gaps may remain unasked. Reuse settled answers on resume.\n'
+                'Collect currently answerable consequential questions in one concise batch; track each answer separately and reuse settled answers on resume.\n'
                 'Keep delegation boundaries explicit. Confirmed requirements also belong in BRIEF and affected task contracts.\n'
                 'Retain superseded answers as history; progress and failed approaches can stay here.\n', encoding='utf-8')
             save_state(root, {'schema': 1, 'kit_version': VERSION, 'profile': args.profile or 'standard',
@@ -242,6 +246,49 @@ def ownership_available(root, state, name):
         if other_name != name and other['status'] == 'doing' and owned.intersection(
                 inside(root, file) for file in other['files']):
             raise ValueError(f'File ownership overlaps active task {other_name}. Run sequentially.')
+
+
+def update_task(root, state, args):
+    task = get_task(state, args.id)
+    if task['status'] == 'verifying':
+        raise ValueError('Inspect the interrupted verification before updating this task.')
+    fields = ('title', 'acceptance', 'files', 'depends', 'owner', 'criteria')
+    supplied = {key: getattr(args, key) for key in fields if getattr(args, key) is not None}
+    if not supplied or not args.reason.strip():
+        raise ValueError('Provide at least one task field and a nonempty change reason.')
+    candidate = {**task, 'criteria': task.get('criteria', []), **supplied}
+    if any(not candidate[key].strip() for key in ('title', 'acceptance', 'owner')):
+        raise ValueError('Title, acceptance criteria and owner must be nonempty.')
+    candidate['files'] = list(dict.fromkeys(Path(name).as_posix() for name in candidate['files']))
+    if not candidate['files']:
+        raise ValueError('Declare at least one watched file.')
+    for name in candidate['files']:
+        path = inside(root, name)
+        if path.is_dir() or path.is_relative_to(record_dir(root)):
+            raise ValueError('Watch project artifacts, not directories or mutable FDE records.')
+    for key in ('depends', 'criteria'):
+        candidate[key] = list(dict.fromkeys(candidate[key]))
+    for dependency in candidate['depends']:
+        get_task(state, dependency)
+    if any(name not in state['criteria'] for name in candidate['criteria']):
+        raise ValueError('Register criteria before linking them to a task.')
+    before = {**contract(task), 'owner': task['owner']}
+    if before == {**contract(candidate), 'owner': candidate['owner']}:
+        print(f'{args.id}: unchanged; no new history or verification required by this update.')
+        return 0
+    if contract(candidate) != contract(task):
+        # A -> B -> A must not revive a proof for the pre-update contract.
+        candidate['contract_revision'] = task.get('contract_revision', 0) + 1
+    proposed = {**state, 'tasks': {**state['tasks'], args.id: candidate}}
+    live = effective(root, proposed)  # Reject self-dependencies/cycles before saving anything.
+    if candidate['status'] == 'doing':
+        ownership_available(root, proposed, args.id)
+    proposed['history'] = [*state['history'], {
+        'time': now(), 'kind': 'task_update', 'id': args.id, 'reason': args.reason,
+        'previous': before, 'current': {**contract(candidate), 'owner': candidate['owner']}}]
+    save_state(root, proposed)
+    print(f'{args.id}: updated; {live["tasks"][args.id]["effective_status"]}. Verification history preserved.')
+    return 0
 
 
 def verify(root, state, args):
@@ -309,7 +356,8 @@ def handoff(root, state):
     lines = [HANDOFF_MARKER, '# FDE handoff', f'Generated: {now()}',
              f'Goal (revision {state["intent"]["revision"]}): {state["intent"]["goal"]}',
              f'Profile: {state["profile"]}', '',
-             'Control: user-led. Ask one unresolved output question at a time; follow the user-authorized scope.',
+             'Control: user-led. Collect currently answerable consequential questions in one concise batch; follow the current user/project question policy.',
+             'Keep one decision per numbered question. Ask dependent follow-ups after the needed answers; skip resolved or trivial questions.',
              'Read BRIEF.md and DECISIONS.md, then run the installed fde.py status command.',
              'This is a snapshot. verified means a recorded command passed for declared files; it is not a quality guarantee.', '']
     next_task = None
@@ -348,13 +396,13 @@ def handoff(root, state):
 def parser():
     p = argparse.ArgumentParser(description='FDE kit: local task contracts, evidence and handoff.')
     commands = p.add_subparsers(dest='action', required=True)
-    for action in ['init', 'add', 'start', 'ready', 'verify', 'intent', 'status', 'handoff', 'criterion', 'coverage', 'launch']:
+    for action in ['init', 'add', 'update', 'start', 'ready', 'verify', 'intent', 'status', 'handoff', 'criterion', 'coverage', 'launch']:
         sub = commands.add_parser(action)
         if action == 'verify':
             sub.add_argument('--timeout', type=float, default=120)
             sub.add_argument('--handoff', action='store_true', help='Refresh handoff after a passed or failed check.')
         sub.add_argument('project', type=Path)
-        if action in ['add', 'start', 'ready', 'verify', 'criterion']:
+        if action in ['add', 'update', 'start', 'ready', 'verify', 'criterion']:
             sub.add_argument('id')
         if action == 'init':
             sub.add_argument('--profile', choices=['standard', 'competition'])
@@ -367,6 +415,14 @@ def parser():
             sub.add_argument('--depends', nargs='*', default=[])
             sub.add_argument('--owner', default='primary')
             sub.add_argument('--criteria', nargs='*', default=[])
+        elif action == 'update':
+            sub.add_argument('--title')
+            sub.add_argument('--acceptance')
+            sub.add_argument('--files', nargs='+', help='Replace the watched-file list; omitted fields stay unchanged.')
+            sub.add_argument('--depends', nargs='*', help='Replace dependencies; an empty list clears them.')
+            sub.add_argument('--owner')
+            sub.add_argument('--criteria', nargs='*', help='Replace linked criteria; an empty list clears them.')
+            sub.add_argument('--reason', required=True)
         elif action == 'verify':
             sub.add_argument('command', nargs=argparse.REMAINDER)
         elif action == 'intent':
@@ -426,6 +482,8 @@ def main(argv=None):
         state = read_state(root)
         if args.action == 'handoff':
             return handoff(root, state)
+        if args.action == 'update':
+            return update_task(root, state, args)
         if args.action == 'criterion':
             if not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9_-]{0,63}', args.id):
                 raise ValueError('Criterion ID must contain only letters, digits, _ or -.')

@@ -29,6 +29,7 @@ python fde.py intent ./project --goal "Include reopened requests" --reason "User
 - `criterion`: register/update an ID, title, `--basis official|assumed` and `--source`. Optional `--points` is the documented official maximum, never a prediction. Invalid/unknown points stay unset; assumed points are rejected.
 - `coverage`: source-aware task/evidence mapping, with optional `--json`. No estimated score or automatic claim of rubric satisfaction.
 - `add`: unique ID, title, acceptance and individual `--files` required. Optional `--depends T1 T2`, `--owner worker-a`, `--criteria R1 R2`. Register criteria before referencing them. Creation order is the default ordering of dependency-ready work; plan that order deliberately.
+- `update`: change an existing task using `update <project> <id> --reason "..."` and at least one of `--title`, `--acceptance`, `--files`, `--depends`, `--owner`, `--criteria`. Omitted fields stay unchanged. Supplied lists replace the old list; empty `--depends` / `--criteria` clears that list, while `--files` needs at least one file. The ID, attempts and evidence logs are preserved; actual changes add a before/after history entry. Unknown tasks/criteria/dependencies, cyclic dependencies, escaping/record paths, active ownership conflicts and writer locks are rejected before saving. A task left `verifying` needs inspection before update.
 - `start`: `doing`; dependencies must be currently verified; shared watched files cannot have two active owners.
 - `ready`: `implemented`, not verified. Existing proof is not reused to skip a new run.
 - `verify`: invokes the actual command without a shell, records a new evidence log, stores snapshots and sets verified/failed. Dependencies and overlap with another active task's watched files are checked even without `start`. Use `verify --timeout 60 ./project T1 -- ...` with timeout before project/task. Default 120 seconds. A timeout is not success. Use meaningful acceptance checks.
@@ -36,6 +37,21 @@ python fde.py intent ./project --goal "Include reopened requests" --reason "User
 - `status`: current effective statuses; `--json` includes contracts and evidence. Read-only, even if a writer lock exists.
 - `intent`: increments goal revision and records the reason. Update BRIEF consistently afterward.
 - `handoff`: regenerate the machine-owned snapshot; user-authored handoff files are not overwritten.
+
+## Update the same task after a requirement change
+
+Update BRIEF when the requirement changes, then update the affected contract **before** running its next verification. Use `add` only for a new independently checkable deliverable, not to replace an existing ID.
+
+```bash
+python fde.py update ./project T1 --acceptance "R1 and the new R2 boundary cases" --reason "User clarified R2"
+# If the watched files change, provide the complete new list with --files.
+# Implement the changed rule and its checks, then verify the current result once.
+python fde.py verify --handoff ./project T1 -- python check_report.py
+```
+
+Changes to title, acceptance, files, dependencies or criteria advance a task-local contract revision. An old verified task and its verified dependents become `needs_verification`; reverting the values does not revive the old proof. Same-value updates do not write history or invalidate evidence. Changing only `--owner` records ownership without invalidating an otherwise current check. These exceptions do not restore evidence already invalidated by files, BRIEF, dependencies or other changes. Failed checks remain failed until verification succeeds; the update command never marks work verified.
+
+The additive revision field retains schema-1 compatibility with existing records/proofs in this CLI. Keep `history` and evidence intact; use the current CLI after upgrading. `update` does not edit BRIEF, implement code, run tests or refresh HANDOFF automatically. Use `verify --handoff` after implementation, or `handoff` when only a current snapshot is needed.
 
 State: `todo → doing → implemented → verified`. Failed checks show `failed`; missing verified dependencies show `blocked`; stale earlier proof shows `needs_verification`. Implementation edits happen through ordinary file tools. File/brief/dependency/log changes are detected when status or handoff runs, not by a background watcher.
 
