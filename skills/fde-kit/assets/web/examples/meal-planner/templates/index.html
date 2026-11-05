@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block title %}이달의 식단 · 온담{% endblock %}
+{% block content %}
+{% set month_parts = month.split('-') %}
+{% set editable = demo_mode and user.role == 'admin' and plan.status == 'draft' %}
+<section class="page-heading">
+  <div><p class="eyebrow">A MONTH OF GOOD MEALS</p><h1>한 달의 좋은 식사<span class="heading-period">.</span></h1><p class="page-intro">우리의 취향을 모아, 매일의 점심을 조금 더 즐겁게.</p></div>
+  <a href="/menus" class="text-link">먹고 싶은 메뉴 고르기 {{ icon('arrow', 17) }}</a>
+</section>
+<section class="stats-strip" aria-label="이달의 식단 요약">
+  <div class="stat-item"><span class="stat-label">이번 달 점심</span><div class="stat-value">{{ stats.filled }}<span>/ {{ stats.days }}일</span></div><span class="stat-caption">평일에 준비하는 한 끼</span></div>
+  <div class="stat-item"><span class="stat-label">한 끼 평균 원가</span><div class="stat-value">{{ '{:,.0f}'.format(stats.average_cost) }}<span>원</span></div><span class="stat-caption">1인 · 한 끼 예산 8,000원</span></div>
+  <div class="stat-item"><span class="stat-label">식단에 담긴 관심</span><div class="stat-value">{{ '{:,}'.format(stats.interest_score) }}<span>점</span></div><span class="stat-caption">날짜별 메뉴 관심 수의 합</span></div>
+  <div class="stat-item"><span class="stat-label">다채로운 메뉴</span><div class="stat-value">{{ stats.unique_menus }}<span>가지</span></div><span class="stat-caption">같은 메뉴는 월 최대 2회</span></div>
+</section>
+<section class="calendar-section" aria-labelledby="calendar-title">
+  <div class="section-toolbar">
+    <div class="month-heading"><h2 id="calendar-title">{{ month_parts[0] }}년 <strong>{{ month_parts[1]|int }}월</strong></h2><div class="month-nav"><a class="icon-button" href="/?month={{ prev_month }}" aria-label="이전 달">{{ icon('left', 16) }}</a><a class="icon-button" href="/?month={{ next_month }}" aria-label="다음 달">{{ icon('right', 16) }}</a></div><span class="status-badge {{ 'draft' if plan.status == 'draft' else 'published' }}">{{ '초안' if plan.status == 'draft' else ('확정 식단' if stats.filled else '식단 준비 중') }}</span></div>
+    <div class="toolbar-actions"><a class="button button-quiet" href="/export.csv?month={{ month }}">{{ icon('download', 16) }}<span>CSV 내려받기</span></a></div>
+  </div>
+  <div class="policy-line"><span>{{ icon('leaf', 15) }} 이번 달의 약속</span><span>한 끼 8,000원 이하</span><span>같은 메뉴 월 2회 이하</span><span>5급식일 이상 간격</span><span>금요일은 튀김기 쉬는 날</span></div>
+  {% if user.role == 'admin' %}
+  <div class="admin-toolbar"><div><span class="admin-label">관리자</span><p>{% if plan.status == 'published' %}확정된 식단입니다. 수정하려면 초안을 열어 주세요.{% else %}초안을 검토하고 날짜별 메뉴를 바꾼 뒤, 구성원에게 공개하세요.{% endif %}</p></div>
+    <div class="admin-actions">
+    {% if plan.status == 'published' %}
+      <form method="post" action="/plans/reopen"><input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="month" value="{{ month }}"><input type="hidden" name="version" value="{{ plan.version }}"><button class="button button-secondary" {% if not demo_mode %}disabled{% endif %}>{{ icon('refresh', 15) }}초안으로 수정</button></form>
+    {% else %}
+      <form method="post" action="/plans/generate"><input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="month" value="{{ month }}"><input type="hidden" name="version" value="{{ plan.version }}"><button class="button button-secondary" {% if not demo_mode %}disabled{% endif %}>{{ icon('refresh', 15) }}{{ '초안 다시 생성' if stats.filled else '식단 초안 생성' }}</button></form>
+      <form method="post" action="/plans/publish"><input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="month" value="{{ month }}"><input type="hidden" name="version" value="{{ plan.version }}"><button class="button button-primary" {% if not demo_mode or stats.filled != stats.days or issues %}disabled{% endif %}>{{ icon('check', 15) }}식단 확정하기</button></form>
+    {% endif %}
+    </div>
+  </div>
+  {% endif %}
+  {% if issues %}<div class="notice notice-error"><strong>확인할 식단 조건</strong><ul>{% for issue in issues %}<li>{{ issue }}</li>{% endfor %}</ul></div>{% endif %}
+  <div class="calendar" aria-label="{{ month_parts[0] }}년 {{ month_parts[1]|int }}월 식단 달력">
+    <div class="weekdays" aria-hidden="true">{% for day_name in ['일', '월', '화', '수', '목', '금', '토'] %}<div class="{{ 'weekend' if loop.index in [1, 7] else '' }}">{{ day_name }}<span>{{ ['SUN','MON','TUE','WED','THU','FRI','SAT'][loop.index0] }}</span></div>{% endfor %}</div>
+    {% for week in weeks %}<div class="calendar-week">
+      {% for day in week %}
+      <article class="calendar-day {{ 'out-of-month' if not day.in_month else '' }} {{ 'day-off' if not day.is_workday else '' }} {{ 'selected-day' if selected_date == day.date else '' }}" {% if day.in_month %}aria-label="{{ day.date }} {{ day.menu.name if day.menu else '식단 없음' }}"{% endif %}>
+        {% if day.in_month %}
+        <div class="day-top"><span class="day-number"><span class="mobile-day-month">{{ month_parts[1]|int }}월 </span>{{ day.day }}<span class="mobile-day-month">일</span></span><span class="mobile-day-name">{{ ['일요일','월요일','화요일','수요일','목요일','금요일','토요일'][loop.index0] }}</span>{% if day.is_friday %}<span class="friday-label" title="금요일은 튀김기를 사용하지 않습니다">튀김기 OFF</span>{% endif %}</div>
+        {% if day.is_workday %}
+          {% if day.menu %}
+          <div class="day-meal"><span class="meal-category">{{ day.menu.category }}</span><a class="meal-name" href="{% if editable %}/?month={{ month }}&amp;date={{ day.date }}#day-editor{% else %}/menus?q={{ day.menu.name|urlencode }}{% endif %}">{{ day.menu.name }}</a><p class="meal-components">{{ day.menu.components|join(' · ') }}</p><div class="meal-meta"><span class="meal-price">{{ '{:,}'.format(day.menu.price) }}<small>원</small></span><span class="meal-interest">{{ icon('heart', 11) }}{{ day.menu.interest_count }}</span></div>{% if editable %}<a class="day-edit" href="/?month={{ month }}&amp;date={{ day.date }}#day-editor" aria-label="{{ day.date }} 메뉴 변경">메뉴 변경 {{ icon('right', 11) }}</a>{% endif %}</div>
+          {% else %}<div class="empty-day"><span class="empty-day-line"></span><span>식단 준비 중</span>{% if editable %}<a href="/?month={{ month }}&amp;date={{ day.date }}#day-editor">메뉴 선택</a>{% endif %}</div>{% endif %}
+        {% else %}<span class="rest-day-label">쉬어가는 날</span>{% endif %}
+        {% endif %}
+      </article>
+      {% endfor %}
+    </div>{% endfor %}
+  </div>
+  <div class="calendar-footnote"><span>{{ icon('info', 14) }} 메뉴를 누르면 {% if editable %}식단을 변경할{% else %}상세 구성과 관심을 확인할{% endif %} 수 있어요.</span><span>표시 원가는 가상 1인 기준 · 관심은 예약이 아닙니다.</span></div>
+</section>
+{% if editable and selected_date %}
+{% set selection = namespace(day=none) %}{% for week in weeks %}{% for day in week %}{% if day.date == selected_date and day.in_month and day.is_workday %}{% set selection.day = day %}{% endif %}{% endfor %}{% endfor %}
+{% if selection.day %}<section id="day-editor" class="day-editor" aria-labelledby="editor-title"><div><p class="eyebrow">EDIT A MEAL</p><h2 id="editor-title">{{ selected_date }} 메뉴 변경</h2><p>예산·반복·간격·금요일 장비 조건을 저장할 때 다시 확인합니다.</p></div><form method="post" action="/plans/{{ selected_date }}/replace"><input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="month" value="{{ month }}"><input type="hidden" name="version" value="{{ plan.version }}"><label for="replacement-menu">새 메뉴</label><div class="editor-controls"><select id="replacement-menu" name="menu_id" required>{% for menu in menus %}<option value="{{ menu.id }}" {% if selection.day.menu and menu.id == selection.day.menu.id %}selected{% endif %}>{{ menu.name }} · {{ '{:,}'.format(menu.price) }}원{{ ' · 튀김기 사용' if menu.requires_fryer else '' }}</option>{% endfor %}</select><button class="button button-primary">변경 저장</button><a class="button button-quiet" href="/?month={{ month }}">취소</a></div></form></section>{% endif %}
+{% endif %}
+<section class="bottom-banner"><div class="banner-icon">{{ icon('plate', 29) }}</div><div><h3>좋아하는 한 끼가, 다음 식단이 되도록.</h3><p>메뉴에 관심을 남겨 주세요. 다음 식단 초안을 만들 때 참고합니다.</p></div><a href="/menus" class="text-link">메뉴 둘러보기 {{ icon('arrow', 17) }}</a></section>
+{% endblock %}

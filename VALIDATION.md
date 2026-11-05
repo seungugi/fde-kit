@@ -1,4 +1,16 @@
-# Validation — v0.6.1 / 2026-11-05
+# Validation — v0.7.0 / 2026-11-05
+
+## Optional web starter and meal simulation — 2026-11-05
+
+The user delegated remaining demonstration details. `web.py init` now creates an independent FastAPI/Jinja2/HTMX/SQLite project, with a generic item board or explicit `--example meal-planner` overlay and a project-local core FDE installation. This is a standard-profile local exercise; it does not validate the official contest environment or waive competition tool restrictions.
+
+- Kit suite: 96 cases, 94 passed, 2 skipped, no failures (247.061 seconds, Windows Python 3.12.14). The skips are existing host-dependent symbolic-link/junction creation cases. Six new scaffold cases cover new-project structure, overlay selection, existing-target preservation, core-only missing assets, invalid example and runtime database/secret exclusion. The six were rerun successfully after final asset changes.
+- Fresh generic project: 4 passed. Actual generated meal project: 20 passed through `fde.py verify --handoff`, with current `verified` state and retained evidence. Starlette emits one deprecation warning for its httpx adapter; it does not fail these pinned tests. No Linux runtime execution is claimed.
+- Real browser: observed menu interest 102 → 103 → 102 through HTMX, role switching, a new December draft (23 weekdays), a valid per-day replacement, publication confirmation, interest dashboard and implementation explanation. Desktop and 390px-wide calendar layouts were visually inspected. This was an agent review, not human acceptance or an automated browser regression suite.
+- Initial November seed: 120 synthetic members, 28 menus, 1,722 distinct member-menu interests, 21 meal dates. The plan uses 11 menus, average per-person cost 7,186 KRW, summed menu interest 1,842 versus 1,506 for the same-constraint rotation baseline (+22.3%). This deterministic synthetic fixture demonstrates the mechanism, not optimality, real satisfaction or expected attendance.
+- Independent fresh-context source review found malformed non-ASCII CSRF input causing a server error and read queries mixing versions during concurrent publication. Both were reproduced before fixes and covered by new regressions. The first generated-project verification also exposed a nested temporary-folder test command that failed on a clean project; the documented command was corrected, the failed evidence retained, and all 20 tests passed on retry.
+
+The demo's Friday equipment rule, repeat limit and spacing are explicitly authored assumptions. This run does not claim blind stakeholder discovery. Authentication is a local fictional-role switch enabled only by DEMO_MODE=1; real identity integration, nutrition validation and production deployment remain outside this starter's scope. Dependencies are pinned; HTMX and its license are bundled for local runtime serving. Existing non-web workflows do not install these dependencies.
 
 ## 2026-11-05: batched questions and existing-task update
 

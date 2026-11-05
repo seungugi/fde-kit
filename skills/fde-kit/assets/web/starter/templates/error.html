@@ -1,0 +1,3 @@
+{% extends 'base.html' %}
+{% block title %}요청 확인 · Workspace{% endblock %}
+{% block content %}<section class="error-state"><p class="eyebrow">PLEASE CHECK YOUR REQUEST</p><h1>요청을 다시 확인해 주세요.</h1><p>{{ error|default('요청을 처리하지 못했습니다. 페이지를 새로 열고 다시 시도해 주세요.', true) }}</p><a href="/" class="button button-primary">메모 보드로 돌아가기</a></section>{% endblock %}

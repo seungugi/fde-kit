@@ -40,6 +40,7 @@ For a small, single-owner deliverable needing tracked verification, use the [sho
 | A required result involves optimizing choices under constraints | [Optimization framing and method selection](references/decide.md#optimization-framing-and-method-selection) | Model, feasible baseline approach, method choice, stopping rule and independent acceptance in the existing brief |
 | Work needs sequencing or independent owners | [Execute](references/execute.md) | Task contracts and working deliverables |
 | A task needs tabular reporting, rule-based prioritization or cited document retrieval | [Execution recipes](references/recipes.md) | Real outputs, provenance and separate acceptance checks |
+| A new small web service needs a reusable implementation baseline | [Web starter](references/web.md) | Confirmed flow implemented with the optional FastAPI/Jinja2/HTMX/SQLite starter; existing stacks preserved |
 | A result, fix or completion needs checking | [Verify](references/verify.md) | Actual evidence tied to the current task and files |
 | Intent changed, session resumed or context is crowded | [Handoff](references/handoff.md) | Current state, decisions and one next action |
 | Someone must operate or explain the output | [Explain](references/explain.md) | Reproducible use instructions and understood limitations |

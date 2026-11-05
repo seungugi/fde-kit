@@ -11,3 +11,7 @@ _local/
 **/fde-notes/
 **/.agents/
 .DS_Store
+*.sqlite3
+*.sqlite3-*
+*.db
+.pytest_cache/

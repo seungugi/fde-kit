@@ -1,0 +1,14 @@
+{% from 'partials/icons.html' import icon %}
+<article id="menu-{{ menu.id }}" class="menu-card {{ 'is-interested' if menu.interested else '' }}">
+  <div class="menu-card-top"><span class="menu-category-label">{{ menu.category }}</span><span class="menu-price">{{ '{:,}'.format(menu.price) }}<small>원</small></span></div>
+  <div class="menu-card-heading"><h2>{{ menu.name }}</h2>{% if menu.interested %}<span class="saved-marker" title="관심 표시한 메뉴">{{ icon('check', 14) }}</span>{% endif %}</div>
+  <p class="menu-description">{{ menu.description }}</p>
+  <div class="menu-components"><span>한 끼 구성</span><p>{{ menu.components|join(' · ') }}</p></div>
+  <div class="menu-tags">{% if menu.requires_fryer %}<span class="equipment-tag">튀김기 사용</span>{% else %}<span class="equipment-tag equipment-free">금요일 편성 가능</span>{% endif %}<span class="budget-tag">{{ '예산 이내' if menu.price <= 8000 else '예산 초과' }}</span></div>
+  <div class="menu-card-footer"><span class="interest-count"><strong>{{ menu.interest_count }}</strong>명 관심</span>
+    <form action="/interests/{{ menu.id }}" method="post" hx-post="/interests/{{ menu.id }}" hx-target="#menu-{{ menu.id }}" hx-swap="outerHTML" hx-disabled-elt="find button">
+      <input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="intent" value="{{ 'remove' if menu.interested else 'add' }}">
+      <button class="interest-button {{ 'selected' if menu.interested else '' }}" type="submit" aria-pressed="{{ 'true' if menu.interested else 'false' }}" aria-label="{{ menu.name }} {{ '관심 취소' if menu.interested else '관심 표시' }}" {% if not demo_mode or user.role != 'member' %}disabled title="회원 데모 모드에서 관심을 표시할 수 있어요"{% endif %}>{{ icon('heart', 16) }}<span>{{ '관심 있어요' if menu.interested else '관심 담기' }}</span><span class="request-indicator" aria-hidden="true"></span></button>
+    </form>
+  </div>
+</article>

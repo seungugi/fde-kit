@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#173d35">
+  <title>{% block title %}업무 메모 · Workspace{% endblock %}</title>
+  <link rel="stylesheet" href="/static/app.css">
+  <script src="/static/htmx.min.js" defer></script>
+  <script src="/static/app.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#main">본문으로 건너뛰기</a>
+<header class="site-header"><a class="brand" href="/"><span class="brand-mark">W</span><span>Workspace</span></a><div class="session-controls">{% if demo_mode %}<span class="demo-label">DEMO</span><form method="post" action="/demo/switch"><input type="hidden" name="csrf" value="{{ csrf }}"><label class="sr-only" for="role">데모 사용자 역할</label><select name="role" id="role"><option value="member" {% if user.role == 'member' %}selected{% endif %}>회원 모드</option><option value="admin" {% if user.role == 'admin' %}selected{% endif %}>관리자 모드</option></select><button class="button button-small" type="submit">전환</button></form>{% else %}<span class="demo-label">읽기 전용</span>{% endif %}</div></header>
+<main id="main" class="main-content" tabindex="-1">{% include 'partials/notice.html' %}{% block content %}{% endblock %}</main>
+<footer class="site-footer"><span>FDE WEB STARTER</span><p>FastAPI · Jinja2 · HTMX · SQLite</p><p>데모 역할 전환은 실제 로그인이 아닙니다.</p></footer>
+</body>
+</html>

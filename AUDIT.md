@@ -1,5 +1,12 @@
 # FDE Kit 감사 기록
 
+## 웹서비스 선택 골격 — 2026-11-05
+
+- 별도 문맥의 코드 리뷰에서 비ASCII CSRF 값이 403 대신 서버 오류를 만드는 문제와 동시 공개 중 조회 결과의 버전·행이 섞이는 문제를 재현했다. 토큰의 ASCII 검사와 읽기 트랜잭션을 추가하고 기본형·식단 예제 양쪽에 회귀검사를 넣었다.
+- 생성된 새 프로젝트의 첫 검증에서 안내 명령이 존재하지 않는 상위 임시 폴더를 요구하는 문제를 발견했다. 루트의 전용 검사 폴더를 쓰도록 명령을 고쳤고 실패 로그를 지우지 않은 채 다시 검증했다.
+- 기존 폴더를 덮어쓰지 않는 생성기, 기본 설치에서 웹 자산 제외, 실행 중 생긴 DB·환경 비밀 파일을 자산으로 배포하지 않는 경계를 검사했다. 권한·중복 관심·편집 충돌·정책 위반 롤백·확정본 보존은 서버 측 검사로 다룬다.
+- 실제 브라우저 확인과 자동 검사 범위, 합성 정책·휴리스틱·데모 인증의 한계를 [VALIDATION.md](VALIDATION.md)에 구분해 기록했다. 실제 대회 점수나 운영 인증을 주장하지 않는다.
+
 ## 2026-11-05: task-update and handoff review
 
 - The old generated handoff forced one question at a time despite project/user batch instructions. Current guidance collects answerable consequential questions in one batch, separates respondents/decisions, defers dependent follow-ups and skips settled/trivial questions. Existing user AGENTS text is preserved during installation; current instructions retain precedence.
