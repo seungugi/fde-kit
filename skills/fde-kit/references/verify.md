@@ -6,7 +6,13 @@
 
 Use a check derived from the requirement. Include a supplied example, an independently determined expected result and important boundary/failure cases. Test the actual output interface where relevant. A model's repeated agreement or a command that merely prints “OK” proves nothing about correctness.
 
-Walk the specification IDs against README deliverables, data evidence, answer sources and selected rules before treating it as ready. Check that each mandatory requirement has an implementation and acceptance condition, and that a stakeholder report has not become a measured number or an unapproved feature. Pending decisions must not silently become test expectations. A successful CLI command does not perform this semantic review.
+Review the current slice against its source-linked requirements; do not repeat discovery. Pending decisions must not become test expectations. Check through an observable boundary (HTTP response and stored state, exported output, or domain interface), not private function structure. For a bug/risky rule, first confirm the focused regression fails for the intended reason, then verify the fix; unrelated setup failure is not that evidence.
+
+Before closing a slice or integrated delivery, review two questions in the same pass:
+- **Requirement fit:** Do implemented behavior, permissions, states and failures satisfy the confirmed acceptance? Is any required behavior missing or extra behavior unsupported?
+- **Implementation quality:** Are validation, persistence, error handling and code boundaries adequate for this scope? Did changes break an already completed path?
+
+Fix material findings and rerun affected checks; do not add a separate report/review ceremony or claim reviewer approval from a test result. Record consequential findings and untested boundaries in DECISIONS. Only delegate a review if independently authorized. For web-specific coverage and manual screen checks use [Web](web.md#acceptance-and-explanation).
 
 Extend existing tests for repeatable checks; use a managed temporary directory for one-off fixtures and probes under the [file rules](execute.md#file-reuse-and-temporary-work). When plausible wrong results are a material risk, challenge the checker with a disposable copy: change one business-critical value while preserving valid syntax and row counts, and confirm it fails. Keep the original output intact and never use the intentional failure as evidence of product success. The full kit's `skills/fde-kit/assets/verification-example/README.md` demonstrates rejection of a partly finished job marked complete despite valid JSON and IDs. It remains in the repository unless installed with `init --full`; running this example is not a prerequisite for checking the actual task. Adapt expected values from requirements; sample cases do not certify another product. Clean up disposable copies after the check while preserving the command log and required failure/regression evidence.
 

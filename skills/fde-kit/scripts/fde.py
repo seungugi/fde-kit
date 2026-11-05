@@ -213,10 +213,7 @@ def init(root, args):
                         'On resuming multi-step work, read `fde-notes/BRIEF.md` and `fde-notes/DECISIONS.md`, then run\n'
                         '`python .agents/skills/fde-kit/scripts/fde.py status .` before relying on HANDOFF.md.\n'
                         'Read only the applicable module. Simple questions and small edits need no full process.\n'
-                        'For README/data work, draft an evidence-linked specification in BRIEF before the next question; distinguish stakeholder facts from participant choices.\n'
-                        'The human leads: collect currently answerable consequential questions in one concise batch; follow the current user/project question policy and wait for needed answers.\n'
-                        'Ordinary wording, colors, layout and equivalent internal implementation are delegated by default within explicit requirements and business meaning.\n'
-                        'Reuse recorded answers. Simple requests use only relevant context and proportionate checks; do not restart the full workflow.\n'
+                        'Keep one evidence-linked BRIEF and decision history; follow the skill for questions, functional slices and review.\n'
                         'Use official rubric sources; label assumptions and never invent weights or predicted scores.\n'
                         'Do not treat this kit as permission to contact people, publish, or use external services.\n'
                         '<!-- /fde-kit -->\n')
