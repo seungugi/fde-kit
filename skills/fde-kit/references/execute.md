@@ -8,6 +8,18 @@ Start from the required input→processing→usable result path in the existing 
 
 Use the file rules below for new work and follow-up requests. CLI state, evidence and handoff are generated records, not extra documents the user must author.
 
+## Functional slices
+
+A slice is one actor action with an independently demonstrable result. For a web service, connect the required screen → request validation/permission → business behavior → storage → visible response and its check. Do not schedule “all database work”, “all APIs”, then “all screens” as separate delivery milestones. Shared setup belongs to the first slice that needs it; preserve sensible code/module boundaries.
+
+Use the same BRIEF and existing task IDs. For each slice name requirement IDs, actor/result, touched interfaces/data, concrete acceptance and actual blocking dependencies. The task's watched files include relevant inputs, implementation, templates, settings and tests. No new ticket files, glossary, state schema or external tracker is required.
+
+Start with the smallest path that tests the critical integration assumption, then complete remaining mandatory behaviors. A slice must satisfy its own hard constraints, including permissions and invalid input handling; its success does not prove the whole service ready. Optional polish follows mandatory integration and verification. A prerequisite-only task is justified when independently necessary/checkable, not just because it is a technical layer.
+
+Review the breakdown against the confirmed scope without repeating the requirements interview. Ask only when the breakdown exposes a new consequential choice. Use existing contracts and [Verify](verify.md) after implementing each slice. Test observable behavior at an existing interface; write a focused failing regression for a bug or risky rule, make it pass, then simplify. Do not force tests for a harmless wording change or mirror private implementation details.
+
+When shared code or BRIEF changes, use status to find stale evidence across slices and run affected acceptance/integration checks. Reuse still-valid evidence. Do not split tasks to hide a shared dependency or edit records to retain green status. Watch the same shared file wherever it affects acceptance; overlapping ownership means sequential work unless interfaces/files can genuinely be separated.
+
 ## File reuse and temporary work
 
 - Locate the relevant existing code, tests, outputs and documents before adding a file. Update them for the new requirement; do not create a new project folder, numbered variant or parallel implementation for each request. Use Git history when available for source versions. Keep an isolated checkout or backup only when a concrete recovery or comparison need warrants it.
@@ -19,7 +31,7 @@ Use the file rules below for new work and follow-up requests. CLI state, evidenc
 
 Apply the [batched question loop](coach.md#one-decision-per-question) before encoding an unresolved consequential business/output rule in code, content or a test expectation. Ordinary wording, colors, layout and equivalent internal implementation are delegated by default. Continue independent authorized work while waiting for a necessary answer. An implementation request does not authorize guessing a missing business rule.
 
-Use the current specification entries as the work contract. Before implementing a unit, check that its mandatory requirements have sources, data implications are supported, stakeholder reports are distinguished from measurements, relevant questions are resolved or delegated, and acceptance matches the selected behavior. Reference its specification IDs in the task's acceptance text and watch the source documents. This review is the agent's responsibility; CLI `status` does not parse or certify the specification.
+Use the current specification IDs as the work contract and apply [Discover's readiness check](discover.md#close-the-interview-with-a-complete-implementation-plan) to the next slice. Reference those IDs in acceptance and watch source documents. Do not rewrite the specification when moving to implementation. CLI status does not certify its meaning.
 
 For an optimization deliverable, implement the [selected model and method](decide.md#optimization-framing-and-method-selection) through the same task contract. Include derived model inputs and their checker among relevant watched files. Generate candidates and preserve a checked feasible result before running acceptance; the acceptance command must not mutate watched outputs. Algorithm iterations reuse the existing implementation/tests and current output, preserving registered evidence and required snapshots. A search limit does not authorize relaxing hard constraints or changing the objective.
 

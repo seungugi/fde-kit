@@ -26,6 +26,12 @@ Open http://127.0.0.1:8765. Keep the process running while using the app. Stop i
 
 DEMO_MODE=1 enables fictional-user switching on the local interface. It does not verify who the visitor really is. Without demo mode protected mutations are disabled pending integration with an authorized identity provider. Do not expose the demo user switch as public login. Set APP_DB to override the database path and APP_SECRET to supply a session secret; keep secrets and database files out of Git. The default local database survives server restart; sessions may be reset when using a process-random secret.
 
+## Adapt one behavior at a time
+
+Read the actual task and update `fde-notes/BRIEF.md`: requirement/source → actor action → page/request → stored result → expected visible outcome. Record consequential answers in DECISIONS. Use the installed workflow's `references/web.md` and `references/execute.md#functional-slices`; do not start a separate web specification.
+
+Build one complete required behavior across routes, storage and templates, with its HTTP/storage check. Reuse its task ID for follow-up changes. Replace unrelated item-board behavior rather than treating it as a requirement. Whole-service completion also needs the remaining required flows and an integration check. The demo role switch remains a demo; this workflow does not add real authentication.
+
 ## Inspect and test
 
 Use the virtual environment's Python:

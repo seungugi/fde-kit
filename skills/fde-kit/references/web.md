@@ -16,6 +16,14 @@ The destination must not exist. This copies local assets and installs the projec
 
 Core installations include this guide and scripts/web.py but omit web assets. Use the matching full repository, or explicitly install with `fde.py init PROJECT --full`. Core copies cannot download missing assets. A full installed skill can run `python .agents/skills/fde-kit/scripts/web.py init NEW_PATH`.
 
+## From requirements to a working service
+
+Use the existing BRIEF's terms, flow and [functional slices](execute.md#functional-slices); do not start another web-design interview or copy the plan into a PRD. For each confirmed behavior connect actor/action, page or fragment, request/response, stored entity/state, permission and visible success/failure. Reuse the requirement ID in acceptance and test names/descriptions where useful.
+
+Implement a slice across the existing starter files, then exercise its HTTP/storage behavior before adding the next. For example, if saving an item is required: form submission → validation/role check → commit → visible saved value after reopening; derive duplicate/empty-input behavior from the actual requirements. The example does not prescribe fields, roles or policy for another service.
+
+If a consequential interaction is unclear, a small authorized prototype can resolve that specific question; it is not a delivered feature or a reason to scaffold multiple competing apps. Record the chosen behavior in the same BRIEF and adapt the existing implementation. Keep terminology consistent between labels, data fields, errors and checks.
+
 ## Rules and boundaries
 
 Keep HTTP handlers, business functions, persistence and templates separate. Retain pinned dependencies and local static assets; keep databases and secrets out of Git. The generic item board is a working example, not a required feature. Adapt it to the requested product and remove unrelated demo functionality.
@@ -26,7 +34,7 @@ The user/role switch is a local demo capability gated by DEMO_MODE=1, not real a
 
 ## Acceptance and explanation
 
-Implement one complete input→validation→business operation→commit→render path first. Test persistence after app recreation, duplicate requests, malformed input, role denial, stale edits and rollback. Recalculate totals from stored source rows. Validate optimization constraints independently and label heuristics; validity does not prove optimality.
+For each slice test confirmed behavior through HTTP and stored state. Cover relevant persistence after app recreation, duplicate requests, malformed input, role denial, stale edits and rollback; do not invent new product rules to satisfy a generic checklist. Recalculate required totals from source rows. For required optimization, validate constraints independently and label heuristics; validity does not prove optimality. After joining slices, check a complete user journey and affected earlier paths using [Verify](verify.md).
 
 TestClient success does not prove HTMX swaps or browser layout. In authorized local practice inspect actual pages and an interaction. Competition's automated-UI prohibition still applies: the participant performs screen checks, separate from permitted terminal tests. Report checks that were not performed.
 
