@@ -99,18 +99,15 @@ clone은 처음 한 번만 합니다. 키트 폴더는 과제 폴더와 별도�
 이 폴더에서 실행하세요. Windows에서는 사용 가능한 `python` 또는 `py`, Linux에서는 보통 `python3`를 사용합니다.
 
 ```bash
-python demo.py ./fde-practice
 python demo_recipes.py ./fde-practice-recipes
 python demo_negative_check.py
 ```
 
-새 연습 폴더를 만들고 예제 실행, 검증, 입력 변경 감지, 재검증, 인수인계 생성까지 진행합니다. 이미 존재하는 폴더는 덮어쓰지 않습니다. 에이전트나 모델을 호출하지 않는 실행 예제입니다.
+`demo_recipes.py`는 새 연습 폴더에서 세 실행 묶음과 검증·인수인계를 체험합니다. 기존 폴더는 덮어쓰지 않습니다. 두 명령 모두 에이전트나 모델을 호출하지 않습니다.
 
 `demo_recipes.py`는 전체 설치를 명시적으로 선택해 합성 요청 9건으로 세 묶음을 실행합니다. 정상 6건·확인 필요 3건, 팀별 금액, 우선순위와 문서 근거를 각각 `verify --handoff`로 검증합니다. [단계별 설명](WALKTHROUGH.md)을 참고하세요.
 
-`demo.py`는 작은 작업의 짧은 흐름을 사용합니다. `demo_negative_check.py`는 정상 결과와, JSON·행 수·ID는 맞지만 부분 완료를 최종 완료로 바꾼 결과를 비교합니다. 후자가 실제로 실패하는지 확인하며 원본은 보존합니다.
-
-[구현 명세 연습](examples/spec-discovery/README.md)은 README·CSV를 읽고, 담당자에게 숨은 운영 맥락을 묻고, 참가자의 선택을 명세에 반영하는 합성 사례입니다. 담당자 정보는 단계별로 제공하므로 진행자 자료를 에이전트에게 먼저 읽히지 마세요. 실제 대회 문제나 개인정보를 포함하지 않습니다.
+`demo_negative_check.py`는 정상 결과와, JSON·행 수·ID는 맞지만 부분 완료를 최종 완료로 바꾼 결과를 비교합니다. 후자가 실제로 실패하는지 확인하며 원본은 보존합니다.
 
 ## 내 프로젝트에 적용하기
 
@@ -210,7 +207,6 @@ python fde.py coverage ./my-project
 - 문제 정의·위임·설명 양식
 - 일반 프로젝트 / 대회 연습 프로필
 - 작업 상태·의존성·파일 충돌·근거 변경 확인과 handoff 생성
-- 요청 우선순위 예제와 재현 가능한 검사
 - Superpowers, Ponytail, Spec Kit, Supermemory의 역할을 구분한 [참고 목록](skills/fde-kit/references/sources.md)
 
 외부 프레임워크 전체, 클라우드 메모리, 배포 기능, 에이전트 실행 서비스는 포함하지 않습니다. 스킬은 실제 환경에 있는 도구를 사용하며 없는 에이전트 기능을 만들어내지 않습니다.
@@ -226,12 +222,3 @@ GitHub 공개 여부와 대회 반입 허용 여부는 별개입니다. 당일 �
 - 공개 자료는 제공 환경 안에서 AI를 통해 가져와 활용합니다. 개인 PC 파일 업로드, 문제·결과물 외부 전송, 개인 API 키·외부 AI 사용은 금지되며, 후속 서술형은 AI 도움 없이 직접 답변합니다.
 
 세부 행동 지침과 출처는 [대회 프로필](skills/fde-kit/references/profiles.md#competition-restrictions)에 있습니다. 프로필은 에이전트 행동 지침이며 모델 선택·네트워크·감독 기능을 기술적으로 차단하지 않습니다. 정확한 당일 규칙과 제공 환경의 통제가 항상 우선입니다.
-
-## 개발 검증
-
-```bash
-python -m unittest discover -s tests -v
-python -m unittest discover -s examples/request-priority -v
-```
-
-시험용 임시 폴더는 `.test-tmp` 아래에 생성됩니다. 공개 저장소를 배포판에 복제하지 않았으며, 계정·키·모델 인증은 필요하지 않습니다.
